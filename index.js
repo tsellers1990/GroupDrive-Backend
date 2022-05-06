@@ -1,18 +1,16 @@
-const http = require("http");
-
-const hostname = process.env.PORT || "127.0.0.1";
-const port = 3000;
-
+require("dotenv").config();
+const express = require("express");
 const routes = require("./routes");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  console.log("path", req);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("GroupDrive Backend Root");
-});
+// Add routes, both API and view
+app.use(routes);
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+// Start the API server
+app.listen(PORT, () => {
+  console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
 });
