@@ -14,4 +14,4 @@ RUN npm set timeout=100000 && npm install
 # Bundle app source
 
 EXPOSE 3000
-CMD [ "node", "index.js" ]
+CMD [ "npm", "run", "start-dev" ]
