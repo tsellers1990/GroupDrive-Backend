@@ -1,10 +1,17 @@
 const { Client } = require("pg");
-const client = new Client();
-client.connect();
-client.query("SELECT *", ["Hello world!"], (err, res) => {
-  console.log(err ? err.stack : res.rows[0].message); // Hello World!
-  client.end();
+const client = new Client({
+    user: 'postgres ',
+    host: 'postgres_database',
+    database: 'group_drive',
+    password: 'example',
+    port: 5432,
+})
+client.connect().then(()=>{
+    console.log("postgres db connection is successfull");
+}).catch((e)=>{
+    console.log("no connection to postgres, did something go wrong? ");
 });
+
 /*
 @name: createUser
 @params: uid, userName, password, carType, displayName, carType, displayName, friends, numDrives, profilePhotoURL
@@ -13,7 +20,7 @@ client.query("SELECT *", ["Hello world!"], (err, res) => {
 */
 const createUser = (uid, userName, password, carType, displayName, friends, numDrives, profilePhotoURL) => {
   // uid, name, pass, email,
-  const text = "INSERT INTO users(name, email) VALUES($1, $2) RETURNING *";
+  const text = "INSERT INTO public.users(uid, \"userName\", password, \"carType\", \"displayName\", friends, \"numDrives\", \"profileURL\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *";
   const values = [uid, userName, password, carType, displayName, friends, numDrives, profilePhotoURL];
   client
     .query(text, values)
@@ -33,11 +40,11 @@ const readUser = (uid, userName) =>{
     let text;
     let values;
     if(!userName){
-        text = "";
+        text = "SELECT * FROM public.users WHERE uid LIKE $1";
         values = [uid];
        
     } else if(!uid){
-        text = ""
+        text = "SELECT * FROM public.users WHERE \"userName\" LIKE $1"
         values = [userName];
     }
     client
@@ -58,8 +65,19 @@ const readUser = (uid, userName) =>{
 */
 const updateUser = (uid, displayName, password) =>{
     // get uid
-    const text = "";
-    const values = [uid, displayName, password];
+    let text;
+    let values;
+    if(!displayName){
+        text = "UPDATE public.users SET \"password\" = $2 WHERE uid LIKE $1 RETURNING *;";
+        values = [uid, password];
+
+    } else if(!password){
+        text = "UPDATE public.users SET \"displayName\" = 'BARRFOOO' WHERE uid LIKE 'ABC123' RETURNING *;\n"
+        values = [userName];
+    } else if(!displayName && !password){
+        text = "SELECT * FROM public.users WHERE \"userName\" LIKE $1"
+        values = [userName];
+    }
     client
     .query(text, values)
     .then((res)=>{
