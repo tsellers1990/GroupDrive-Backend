@@ -10,10 +10,10 @@ Remove - This will take two UIDs, it will then remove the entry from the databas
 */
 
 /*
-@name: createUser
-@params: uid, userName, password, carType, displayName, carType, displayName, friends, numDrives, profilePhotoURL
-@desc: Generates a prepared statement to inject values into the correct fields via postgresql
-@return: true if user was successfully created
+@name: addFriend
+@params: uidIntiator, uidRecipient
+@desc: will create a friend entry in the relationships table, and will set it to pending
+@return:
 */
 const createUser = (uid, userName, password, carType, displayName, friends, numDrives, profilePhotoURL) => {
     // uid, name, pass, email,
