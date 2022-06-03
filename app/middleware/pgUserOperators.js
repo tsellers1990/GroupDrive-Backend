@@ -1,16 +1,4 @@
-const { Client } = require("pg");
-const client = new Client({
-    user: 'postgres ',
-    host: 'postgres_database',
-    database: 'group_drive',
-    password: 'example',
-    port: 5432,
-})
-client.connect().then(()=>{
-    console.log("postgres db connection is successfull");
-}).catch((e)=>{
-    console.log("no connection to postgres, did something go wrong? ");
-});
+const {client} = require("../middleware/postgresClient")
 
 /*
 @name: createUser
@@ -39,10 +27,11 @@ const createUser = (uid, userName, password, carType, displayName, friends, numD
 const readUser = (uid, userName) =>{
     let text;
     let values;
+    //handles the lookup of a user when UID is not known
     if(!userName){
         text = "SELECT * FROM public.users WHERE uid LIKE $1";
         values = [uid];
-       
+    //handles the lookup of a user when the UID is known, this is the preffered option
     } else if(!uid){
         text = "SELECT * FROM public.users WHERE \"userName\" LIKE $1"
         values = [userName];
@@ -67,17 +56,21 @@ const updateUser = (uid, displayName, password) =>{
     // get uid
     let text;
     let values;
-    if(!displayName){
-        text = "UPDATE public.users SET \"password\" = $2 WHERE uid LIKE $1 RETURNING *;";
-        values = [uid, password];
-
-    } else if(!password){
-        text = "UPDATE public.users SET \"displayName\" = 'BARRFOOO' WHERE uid LIKE 'ABC123' RETURNING *;\n"
-        values = [userName];
-    } else if(!displayName && !password){
-        text = "SELECT * FROM public.users WHERE \"userName\" LIKE $1"
-        values = [userName];
+    if (!uid){
+        console.error("UID must exist")
     }
+    //allows the update of a users displayname, the displayname and username are different and username should be a unique key enforced further upstream
+    else if(!displayName){
+        text = "UPDATE public.users SET \"password\" = $2 WHERE uid LIKE $1 RETURNING *;";
+        values = [uid, password];//
+
+    }
+    //allows the update of a users password, this should not be plain text and should be salted further upstream
+    else if(!password){
+        text = "UPDATE public.users SET \"displayName\" = $2 WHERE uid LIKE $1 RETURNING *;"
+        values = [uid, displayName];
+    }
+
     client
     .query(text, values)
     .then((res)=>{
@@ -93,9 +86,9 @@ const updateUser = (uid, displayName, password) =>{
 @return: return true if user was successfully deleted. 
 */
 const deleteUser = (uid) =>{
-    // get uid
-    const text = "INSERT INTO users(name, email) VALUES($1, $2) RETURNING *";
-    const values = [uid, userName, password, carType, displayName, friends, numDrives, profilePhotoURL];
+    //removes a user completely from the table, this function has no verification, and once its called, the user row is removed, that verification should be handled further down stream
+    const text = "DELETE FROM public.users where uid LIKE $1 returning *;";
+    const values = [uid];
     client
       .query(text, values)
       .then((res) => {
