@@ -12,6 +12,4 @@ router.use("/user", userRoutes)
 router.use("/friend", friendRoutes)
 router.use("/drive", driveRoutes)
 
-
-
 module.exports = router
