@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:3000"
     environment:
-      ENV: "dev"
+      ENV: "local"
       PGHOST: 'postgres_database'
       PGUSER: 'postgres'
       PGDATABASE: 'group_drive'
