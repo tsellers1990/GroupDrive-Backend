@@ -16,7 +16,7 @@ var connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
 
 m.connect(connectionString, options)
   .then(() => {
-    console.log("connection is successfull");
+    console.log("mongo connection is successfull");
   })
   .catch((e) => {
     console.log("no connection ");

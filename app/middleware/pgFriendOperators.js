@@ -5,7 +5,7 @@ Add - This takes in two UIDs and will create an intial relationship entry and se
 Accepted - This will take two UIDs, this will update the relationship to accepted
 Rejected - This will take two UIDs, this will update the relationship to rejected by deleting the row
 Block - This will take two UIDs, this will update the relationship to blocked and will not delete the entry
-Unblock - This will take two UIDs, this will update the relationship back to accepted
+Unblock - This will take two UIDs, this will update the relationship to rejected by deleting the row
 Remove - This will take two UIDs, it will then remove the entry from the database
 */
 
@@ -15,14 +15,56 @@ Remove - This will take two UIDs, it will then remove the entry from the databas
 @desc: will create a friend entry in the relationships table, and will set it to pending
 @return:
 */
-const createUser = (uid, userName, password, carType, displayName, friends, numDrives, profilePhotoURL) => {
-    // uid, name, pass, email,
-    const text = "INSERT INTO public.users(uid, \"userName\", password, \"carType\", \"displayName\", friends, \"numDrives\", \"profileURL\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *";
-    const values = [uid, userName, password, carType, displayName, friends, numDrives, profilePhotoURL];
-    client
-        .query(text, values)
-        .then((res) => {
-            console.log(res.rows[0]);
-        })
-        .catch((e) => console.error(e.stack));
+const addFriend = (uidA, uidB) => {
+    
+};
+
+/*
+@name: acceptFriend
+@params: uidIntiator, uidRecipient
+@desc: will create a friend entry in the relationships table, and will set it to pending
+@return:
+*/
+const acceptFriend = (uidA, uidB) => {
+    
+};
+
+/*
+@name: rejectFriend
+@params: uidIntiator, uidRecipient
+@desc: will create a friend entry in the relationships table, and will set it to pending
+@return:
+*/
+const rejectFriend = (uidA, uidB) => {
+    
+};
+
+/*
+@name: blockUser
+@params: uidIntiator, uidRecipient
+@desc: will create a friend entry in the relationships table, and will set it to pending
+@return:
+*/
+const blockUser = (uidA, uidB) => {
+    
+};
+
+/*
+@name: unblockFriend
+@params: uidIntiator, uidRecipient
+@desc: will create a friend entry in the relationships table, and will set it to pending
+@return:
+*/
+const unblockFriend = (uidA, uidB) => {
+    
+};
+
+/*
+@name: removeFriend
+@params: uidIntiator, uidRecipient
+@desc: will create a friend entry in the relationships table, and will set it to pending
+@return:
+*/
+const removeFriend = (uidA, uidB) => {
+    
 };
