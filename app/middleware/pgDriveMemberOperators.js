@@ -5,3 +5,9 @@ Add - will take two UIDs, the first being the driveUID and the second being the 
 Interested - will take two UIDs, the first being the driveUID and the second being the userUID and create an entry markign the user as interested in the drive
 Remove - will take two UIDs, the first being the driveUID and the second being the userUID, this will remove the entry for the user being in/interested for the drive
 */
+
+const temp = async () => {
+    console.log("temp function called")
+}
+
+module.exports = {temp}
