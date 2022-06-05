@@ -13,7 +13,7 @@ exports.shorthands = undefined;
 //     "profileURL"  varchar
 // );
 exports.up = pgm => {pgm.createTable('users', {
-    id: {
+    uid: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -45,6 +45,11 @@ exports.up = pgm => {pgm.createTable('users', {
         type: "varchar(255)",
         notNull: true,
         defaultValue: "https://res.cloudinary.com/selrich-technology/image/upload/v1653431979/ymztltnx1lgsynhqknw2.png"
+    },
+    lastSignIn:{
+      type: 'timestamp',
+      notNull: true,
+      default: pgm.func('current_timestamp'),
     },
     createdAt: {
         type: 'timestamp',
