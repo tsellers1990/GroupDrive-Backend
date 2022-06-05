@@ -46,33 +46,40 @@ const createUser = async (
 @desc: queries user database using user UID to generate an array of user info.
 @return: Array of user information
 */
-const readUser = async (uid, userName) => {
+const readUser = async (uid, userName, isPass) => {
   let text;
   let values;
   //handles the lookup of a user when UID is not known
-
-  console.log("in the readuser");
+  console.log({ isPass });
   if (!userName) {
-    text = "SELECT * FROM public.users WHERE uid LIKE $1";
+    text =
+      isPass === true
+        ? "SELECT * FROM public.users WHERE uid LIKE $1"
+        : `SELECT uid, "userName", "carType", "displayName", "numDrives", "profileURL" FROM public.users WHERE uid LIKE $1`;
     values = [uid];
     //handles the lookup of a user when the UID is known, this is the preffered option
   } else if (!uid || (uid && userName)) {
-    text = 'SELECT * FROM public.users WHERE "userName" LIKE $1';
+    text =
+      isPass === true
+        ? 'SELECT * FROM public.users WHERE "userName" LIKE $1'
+        : `SELECT uid, "userName", "carType", "displayName", "numDrives", "profileURL" FROM public.users WHERE "userName" LIKE $1`;
     values = [userName];
   }
+
+  console.log({ text, uid });
 
   const response = await client
     .query(text, values)
     .then((res) => {
-      console.log(res.rows[0]);
+      console.log("resRows", res.rows[0]);
       return res.rows;
     })
-    .catch((e) =>  {
-        console.error(e.stack)
-        return false;
+    .catch((e) => {
+      console.error(e.stack);
+      return false;
     });
 
-    return response;
+  return response[0];
 };
 
 /*
@@ -114,16 +121,27 @@ const updateUser = (uid, displayName, password) => {
 @desc: takes uid of user profile to be deleted and removes the user entry in the database.
 @return: return true if user was successfully deleted. 
 */
-const deleteUser = (uid) => {
+const deleteUser = async (uid) => {
   //removes a user completely from the table, this function has no verification, and once its called, the user row is removed, that verification should be handled further down stream
   const text = "DELETE FROM public.users where uid LIKE $1 returning *;";
   const values = [uid];
-  client
-    .query(text, values)
-    .then((res) => {
-      console.log(res.rows[0]);
-    })
-    .catch((e) => console.error(e.stack));
+  try {
+    const res = await client
+      .query(text, values)
+      .then((res) => {
+        console.log(res.rows[0]);
+        return true
+      })
+      .catch((e) => {
+        console.error(e.stack)
+        return false
+      });
+
+      return res
+  
+  } catch (e) {
+    console.log("deleteUser err")
+  }
 };
 
 module.exports = { createUser, readUser, updateUser, deleteUser };

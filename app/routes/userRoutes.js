@@ -1,43 +1,26 @@
 const router = require("express").Router();
-const pgDriveMembers = require("../middleware/pgDriveMemberOperators");
-const pgDrive = require("../middleware/pgDriveOperators");
-const pgFriend = require("../middleware/pgFriendOperators");
-const pgUser = require("../middleware/pgUserOperators");
-const pgChat = require("../middleware/ChatOperators");
-// ! ^^^^ these will all get deconstructed out OR pgChat.function()
-
-// * Drive Members
-router.get("/driveMem", async (req, res) => {});
-
-router.put("/driveMem", async (req, res) => {});
-
-// * Drives
-router.get("/drive", async (req, res) => {});
-
-router.put("/drive", async (req, res) => {});
-
-// * Friends
-router.get("/friend", async (req, res) => {});
-
-router.put("/friend", async (req, res) => {});
+const userOperators = require("../middleware/pgUserOperators");
 
 // * Users
-router.get("/user", async (req, res) => {
-  const {
-    uid,
-    userName,
-  } = req.query;
+router.get("/getUser", async (req, res) => {
+  const { uid, userName } = req.query;
+  const isPass = req?.query?.isPass;
+
   try {
-    let response = await pgUser.readUser(uid, userName);
+    let response = await userOperators.readUser(
+      uid,
+      userName,
+      JSON.parse(isPass)
+    );
     if (response) {
       res.json(response);
     } else {
       res.send(500);
     }
-  } catch {
-    console.log("caught something");
+  } catch (e) {
+    console.log("caught something, getuser", e);
+    res.send(500);
   }
-
 });
 
 router.put("/createUser", async (req, res) => {
@@ -52,7 +35,7 @@ router.put("/createUser", async (req, res) => {
   } = req.query;
 
   try {
-    let response = await pgUser.createUser(
+    let response = await userOperators.createUser(
       uid,
       userName,
       password,
@@ -73,6 +56,7 @@ router.put("/createUser", async (req, res) => {
 });
 
 router.put("/updateUser", async (req, res) => {
+  //   ! incomplete
   const {
     uid,
     userName,
@@ -84,7 +68,7 @@ router.put("/updateUser", async (req, res) => {
   } = req.query;
 
   try {
-    let response = await pgUser.createUser(
+    let response = await userOperators.createUser(
       uid,
       userName,
       password,
@@ -104,9 +88,26 @@ router.put("/updateUser", async (req, res) => {
   }
 });
 
-// * Chats
-router.get("/chat", async (req, res) => {});
+router.delete("/deleteUser", async (req, res) => {
+  //   ! incomplete
+  const { uid, userName, password } = req.query;
 
-router.put("/chat", async (req, res) => {});
+  try {
+    let readData = await userOperators.readUser(uid, userName, true);
+
+    if (readData?.password === password) {
+      const result = await userOperators.deleteUser(uid);
+      if (result) {
+        res.send(200);
+      } else {
+        res.send(500);
+      }
+    } else {
+      res.status(500).send("passwords do not match");
+    }
+  } catch (e) {
+    console.log("caught something delete", e);
+  }
+});
 
 module.exports = router;
