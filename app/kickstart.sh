@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
 #Lets kick off a migration
 echo "Starting DB Migration!"
-npm run migrate up
+until npm run migrate up >> /dev/null; do echo "Retrying Migration till DB is Ready..."; sleep 2; done
+echo "Migration is Complete!"
 
-#Check if Env file is set on container
-if [ "$ENV" == "" ] || [ $# -gt 1 ]; then
-        echo "Please enter an environment to run!"
-        exit 1
-fi
-
-#Are we running in a Dev environment?
-if [ "$ENV" == "dev"] || [ "$ENV" == "DEV" ]
-        echo "Starting App in Dev Mode"
-        npm run start-dev
-fi
-
-#Are we running in a qa environment?
-if [ "$ENV" == "qa"] || [ "$ENV" == "QA" ]
-        echo "Starting App in Dev Mode"
-        npm run start-dev
-fi
-
-#Are we running in a Production environment?
-if [ "$ENV" == "prod"] || [ "$ENV" == "PROD" ]
-        echo "Starting App in Dev Mode"
-        npm run start-dev
-fi
+#Lets setup our App for which environment we are in
+case $ENV in
+  #Are we running in a Dev Env?
+  dev | DEV)
+    echo "Starting App in Dev Mode"
+    npm run start-dev
+    ;;
+  #Are we running in a QA Env?
+  qa | QA)
+    echo "Starting App in QA Mode"
+    npm run start-dev
+    ;;
+  #Are we running in a Production Env?
+  prod | PROD)
+    echo "Starting App in Production Mode"
+    npm run start-dev
+   ;;
+ #Error case statement, we should never hit this here!
+  *)
+    echo "ENV variable not set, or it is not recognized"
+    exit 1
+ esac
