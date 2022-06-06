@@ -8,6 +8,8 @@ Remove - will take two UIDs, the first being the driveUID and the second being t
 
 const temp = async () => {
     console.log("temp function called")
+
+    return true
 }
 
 module.exports = {temp}
