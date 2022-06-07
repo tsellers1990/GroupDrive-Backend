@@ -2,7 +2,7 @@
 
 exports.shorthands = undefined;
 
-exports.up = pgm => {pgm.createTable('users', {
+exports.up = pgm => {pgm.createTable('chatTopics', {
     chatUid: {
         allowNull: false,
         type: 'integer',
@@ -11,7 +11,7 @@ exports.up = pgm => {pgm.createTable('users', {
         allowNull: false,
         type: 'integer'
     },
-    state:{
+    type:{
         allowNull: false,
         type: varchar(10)
     },

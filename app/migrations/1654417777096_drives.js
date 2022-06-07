@@ -2,7 +2,7 @@
 
 exports.shorthands = undefined;
 //Create - This will create a drive, it will take in the orginizerUID, geoJSON ID in mongo, date its occuring, driver limits, and if its a reoccuring meet, topicID of GroupChat
-exports.up = pgm => {pgm.createTable('users', {
+exports.up = pgm => {pgm.createTable('drives', {
     driveId: {
         allowNull: false,
         autoIncrement: true,

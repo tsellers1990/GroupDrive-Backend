@@ -2,7 +2,7 @@
 
 exports.shorthands = undefined;
 
-exports.up = pgm => {pgm.createTable('users', {
+exports.up = pgm => {pgm.createTable('driveRoutes', {
     routeId: {
         allowNull: false,
         autoIncrement: true,
