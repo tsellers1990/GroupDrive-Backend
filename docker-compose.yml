@@ -14,9 +14,9 @@ services:
     volumes:
       - ./app/:/usr/src/app
       - ./log:/var/log
-    depends_on:
-      - postgres_database
-      - mongo_db
+#    depends_on:
+#      - postgres_database
+#      - mongo_db
   zoo1:
     image: confluentinc/cp-zookeeper:7.1.1
     hostname: zoo1
