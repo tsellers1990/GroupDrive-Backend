@@ -13,7 +13,7 @@ exports.up = pgm => {pgm.createTable('driveMemberships', {
     },
     state:{
       allowNull: false,
-      type: varchar(10)
+      type: 'varchar(10)'
     },
     createdAt: {
         type: 'timestamp',

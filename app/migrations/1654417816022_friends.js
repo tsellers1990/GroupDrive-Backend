@@ -13,7 +13,7 @@ exports.up = pgm => {pgm.createTable('friends', {
     },
     relationship:{
         allowNull: false,
-        type: varchar(10)
+        type: 'varchar(10)'
     },
     createdAt: {
         type: 'timestamp',

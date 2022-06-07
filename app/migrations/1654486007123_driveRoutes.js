@@ -15,11 +15,11 @@ exports.up = pgm => {pgm.createTable('driveRoutes', {
     },
     tags:{
         allowNull: true,
-        type: varchar(500)
+        type: 'varchar(500)'
     },
     mongoGeoID: {
         allowNull: false,
-        type: integer
+        type: 'integer'
     },
     createdAt: {
         type: 'timestamp',
