@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {test} = require("../middleware/kafkaChat");
 
-router.get("/", async (req, res) => {
+router.get("/kafkaMeme", async (req, res) => {
     // const data = await create();
     await test();
     // return(
