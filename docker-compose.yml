@@ -4,33 +4,55 @@ services:
     build: .
     ports:
       - "8000:3000"
+    environment:
+      ENV: "local"
+      PGHOST: 'postgres_database'
+      PGUSER: 'postgres'
+      PGDATABASE: 'group_drive'
+      PGPASSWORD: 'example'
+      PGPORT: 5432
     volumes:
       - ./app/:/usr/src/app
       - ./log:/var/log
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.0.1
-    container_name: zookeeper
+#    depends_on:
+#      - postgres_database
+#      - mongo_db
+  zoo1:
+    image: confluentinc/cp-zookeeper:7.1.1
+    hostname: zoo1
+    container_name: zoo1
+    ports:
+      - "2181:2181"
+    platform: "linux/amd64"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zoo1:2888:3888
 
-  broker:
-    image: confluentinc/cp-kafka:7.0.1
-    container_name: broker
+  kafka1:
+    image: confluentinc/cp-kafka:7.1.1
+    hostname: kafka1
+    container_name: kafka1
     ports:
-      # To learn about configuring Kafka for access across networks see
-      # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
       - "9092:9092"
-    depends_on:
-      - zookeeper
+      - "9999:9999"
+    platform: "linux/amd64"
     environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+    depends_on:
+      - zoo1
 
   redis:
     image: redis
@@ -42,10 +64,9 @@ services:
     container_name: postgres_database
     ports:
       - "5432:5432"
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: example
+      POSTGRES_DB: group_drive
 
   mongo_db:
     image: mongo
@@ -55,5 +76,3 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
-    volumes:
-      - ./mongo_data:/data/db

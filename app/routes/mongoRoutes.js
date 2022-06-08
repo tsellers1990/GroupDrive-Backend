@@ -1,21 +1,20 @@
-const {db, write, read} = require("../middleware/mongoConnection")
+const { db, write, read } = require("../middleware/mongoConnection");
 const router = require("express").Router();
 
-
 router.get("/", async (req, res) => {
+  const data = await read();
 
-    // read()
-    //write();
-    const data = await read()
-    
-    res.send(data)
-
+  res.send(data);
 });
 
 // ! post route
-router.put("/", (req, res) => {
+router.put("/", async (req, res) => {
+  const { uid, userName, coordinate, isOnline } = req.body;
+
+  const data = await write(uid, userName, coordinate, isOnline);
   //? also something to send off
-  res.send("what we return from put route");
+
+  res.send(200);
 });
 
 //

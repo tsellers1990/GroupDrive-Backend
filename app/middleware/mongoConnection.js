@@ -6,48 +6,64 @@ mongoose instanceof mongoose.Mongoose; // true
 const m = new mongoose.Mongoose();
 
 var options = {
-    user: "root",
-    pass: "example",
-    useNewUrlParser:true,
-    useUnifiedTopology:true
+  user: "root",
+  pass: "example",
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 
 var connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
 
-m.connect(connectionString, options).then(()=>{
-    console.log("connection is successfull");
-}).catch((e)=>{
+m.connect(connectionString, options)
+  .then(() => {
+    console.log("mongo connection is successfull");
+  })
+  .catch((e) => {
     console.log("no connection ");
-});
+  });
 
-var db = m.connection
+var db = m.connection;
 
+const write = (uid, userName, coordinate, isOnline) => {
+  let writeSuccess = {
+    replace: true,
+    update: true,
+  };
 
-const write = () => {
-    console.log("bleh")
-    // db.createCollection("bleh")
-    
-    var arr = ["foo", "bar"]
-    
-    db.useDb("local")
-    db.collection("bleh").insertOne({
-        _id:"bleh", item: "Value", geoGnlewh: "stringified bleh"})
-    // db.once('open', function() {
-    //     console.log("Connection Successful!");
-    //     res.status(200)
-         
-    // });
-}
+  db.useDb("local");
 
-const read = async() => {
+  // ! this will replace an existing UID in the table, BUT does not create if none exist
+  db.collection("geo-location")
+    .findOneAndReplace(
+      { _id: uid },
+      {
+        _id: uid,
+        userName,
+        coordinate,
+        isOnline,
+      }
+    )
+    .then((res) => {
+      if (!res.lastErrorObject.updatedExisting) {
+        // ! trigger create new instance
+        db.collection("geo-location").insertOne({
+          _id: uid,
+          userName,
+          coordinate,
+          isOnline,
+        });
+      }
 
-    db.useDb("local")
+      console.log({ res });
+    });
 
-    const data = await db.collection("bleh").findOne({"key" : "Value"});
-    
+  return writeSuccess;
+};
 
-    console.log({data})
-    return data
-}
+const read = async () => {
+  db.useDb("local");
 
-module.exports = {db, write, read};
+  db.collection("geo-location").once()
+};
+
+module.exports = { db, write, read };

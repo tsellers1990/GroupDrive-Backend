@@ -1,19 +1,18 @@
 const router = require("express").Router();
 
 const mongoRoutes = require("./mongoRoutes");
-// const sqlRoutes = require("./brokerRoutes");
-// const redisRoutes = require("./brokerRoutes");
-// const brokerRoutes = require("./brokerRoutes");
-
-// router.use("/db", firebaseRoutes);
+const chatRoutes = require("./chatRoutes");
+const userRoutes = require("./userRoutes")
+const friendRoutes = require("./friendRoutes")
+const driveRoutes = require("./driveRoutes")
+const kafkaRoutes = require("./kafkaRoutes")
 
 router.use("/mongo", mongoRoutes)
-// router.use("/sql", sqlRoutes)
-// router.use("/redis", redisRoutes)
-// router.use("/broker", brokerRoutes)
-
-// localhost:9000/mongo/post
-
+router.use("/chat", chatRoutes)
+router.use("/user", userRoutes)
+router.use("/friend", friendRoutes)
+router.use("/drive", driveRoutes)
+router.use("/kafka", kafkaRoutes)
 
 
 module.exports = router

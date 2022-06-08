@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start-dev": "nodemon index.js"
+    "start-dev": "nodemon -L index.js",
+    "migrate": "node-pg-migrate"
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +22,10 @@
     "firebase-admin": "^10.1.0",
     "fs": "0.0.1-security",
     "if-env": "^1.0.4",
+    "kafkajs": "^2.0.2",
     "moment": "^2.29.3",
     "mongoose": "^6.3.4",
+    "node-pg-migrate": "^6.2.1",
     "pg": "^8.7.3"
   }
 }

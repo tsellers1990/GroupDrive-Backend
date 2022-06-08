@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:14
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -14,4 +14,4 @@ RUN npm set timeout=100000 && npm install
 # Bundle app source
 
 EXPOSE 3000
-CMD [ "npm", "run", "start-dev" ]
+CMD [ "sh", "kickstart.sh" ]
