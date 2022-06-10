@@ -24,16 +24,18 @@ m.connect(connectionString, options)
 
 var db = m.connection;
 
-const write = (uid, userName, coordinate, isOnline) => {
-  let writeSuccess = {
-    replace: true,
-    update: true,
-  };
-
-  db.useDb("local");
+const write = async (uid, userName, coordinate, isOnline) => {
+  if (!uid) return false;
+  if (!isOnline)
+    return db
+      .useDb("local")
+      .collection("geo-location")
+      .findOneAndReplace({ _id: uid }, { isOnline: false });
 
   // ! this will replace an existing UID in the table, BUT does not create if none exist
-  db.collection("geo-location")
+  const putResult = await db
+    .useDb("local")
+    .collection("geo-location")
     .findOneAndReplace(
       { _id: uid },
       {
@@ -46,24 +48,32 @@ const write = (uid, userName, coordinate, isOnline) => {
     .then((res) => {
       if (!res.lastErrorObject.updatedExisting) {
         // ! trigger create new instance
-        db.collection("geo-location").insertOne({
-          _id: uid,
-          userName,
-          coordinate,
-          isOnline,
-        });
+        db.collection("geo-location")
+          .insertOne({
+            _id: uid,
+            userName,
+            coordinate,
+            isOnline,
+          })
+          .then((res) => {
+            return true;
+          });
       }
-
-      console.log({ res });
+      return true;
     });
-
-  return writeSuccess;
+  return putResult;
 };
 
 const read = async () => {
   db.useDb("local");
 
-  db.collection("geo-location").once()
+  return db.collection("geo-location").once();
 };
 
-module.exports = { db, write, read };
+const readOne = async () => {
+  db.useDb("local");
+
+  db.collection("geo-location").once();
+};
+
+module.exports = { write, read, readOne };
