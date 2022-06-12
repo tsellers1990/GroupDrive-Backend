@@ -5,14 +5,14 @@ mongoose instanceof mongoose.Mongoose; // true
 // Create a new Mongoose instance with its own `connect()`, `set()`, `model()`, etc.
 const m = new mongoose.Mongoose();
 
-var options = {
+const options = {
   user: "root",
   pass: "example",
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
-var connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
+const connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
 
 m.connect(connectionString, options)
   .then(() => {
@@ -22,18 +22,20 @@ m.connect(connectionString, options)
     console.log("no connection ");
   });
 
-var db = m.connection;
+const db = m.connection;
 
-const write = (uid, userName, coordinate, isOnline) => {
-  let writeSuccess = {
-    replace: true,
-    update: true,
-  };
-
-  db.useDb("local");
+const write = async (uid, userName, coordinate, isOnline) => {
+  if (!uid) return false;
+  if (!isOnline)
+    return await db
+      .useDb("local")
+      .collection("geo-location")
+      .findOneAndReplace({ _id: uid }, { isOnline: false });
 
   // ! this will replace an existing UID in the table, BUT does not create if none exist
-  db.collection("geo-location")
+  const putResult = await db
+    .useDb("local")
+    .getCollection("geo-location")
     .findOneAndReplace(
       { _id: uid },
       {
@@ -46,24 +48,56 @@ const write = (uid, userName, coordinate, isOnline) => {
     .then((res) => {
       if (!res.lastErrorObject.updatedExisting) {
         // ! trigger create new instance
-        db.collection("geo-location").insertOne({
-          _id: uid,
-          userName,
-          coordinate,
-          isOnline,
-        });
+        db.collection("geo-location")
+          .insertOne({
+            _id: uid,
+            userName,
+            coordinate,
+            isOnline,
+          })
+          .then((res) => {
+            return true;
+          });
       }
-
-      console.log({ res });
+      return true;
     });
-
-  return writeSuccess;
+  return putResult;
 };
 
 const read = async () => {
-  db.useDb("local");
+  const data = [];
+  await db
+    .useDb("local")
+    .collection("geo-location")
+    .find({}, function (err, res) {
+      if (err) return false;
+      else {
+        return res;
+      }
+    })
+    .forEach((dbUserGeo) => {
+      data.push(dbUserGeo);
+    });
 
-  db.collection("geo-location").once()
+  return data;
 };
 
-module.exports = { db, write, read };
+const readOne = async (uid) => {
+  const data = [];
+  await db
+    .useDb("local")
+    .collection("geo-location")
+    .find({ _id: uid }, function (err, res) {
+      if (err) return false;
+      else {
+        return res;
+      }
+    })
+    .forEach((dbUserGeo) => {
+      data.push(dbUserGeo);
+    });
+
+  return data;
+};
+
+module.exports = { write, read, readOne };
