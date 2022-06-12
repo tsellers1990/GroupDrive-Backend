@@ -27,7 +27,7 @@ var db = m.connection;
 const write = async (uid, userName, coordinate, isOnline) => {
   if (!uid) return false;
   if (!isOnline)
-    return db
+    return await db
       .useDb("local")
       .collection("geo-location")
       .findOneAndReplace({ _id: uid }, { isOnline: false });
@@ -35,7 +35,7 @@ const write = async (uid, userName, coordinate, isOnline) => {
   // ! this will replace an existing UID in the table, BUT does not create if none exist
   const putResult = await db
     .useDb("local")
-    .collection("geo-location")
+    .getCollection("geo-location")
     .findOneAndReplace(
       { _id: uid },
       {
@@ -65,15 +65,39 @@ const write = async (uid, userName, coordinate, isOnline) => {
 };
 
 const read = async () => {
-  db.useDb("local");
+  const data = [];
+  await db
+    .useDb("local")
+    .collection("geo-location")
+    .find({}, function (err, res) {
+      if (err) return false;
+      else {
+        return res;
+      }
+    })
+    .forEach((dbUserGeo) => {
+      data.push(dbUserGeo);
+    });
 
-  return db.collection("geo-location").once();
+  return data;
 };
 
-const readOne = async () => {
-  db.useDb("local");
+const readOne = async (uid) => {
+  const data = [];
+  await db
+    .useDb("local")
+    .collection("geo-location")
+    .find({ _id: uid }, function (err, res) {
+      if (err) return false;
+      else {
+        return res;
+      }
+    })
+    .forEach((dbUserGeo) => {
+      data.push(dbUserGeo);
+    });
 
-  db.collection("geo-location").once();
+  return data;
 };
 
 module.exports = { write, read, readOne };

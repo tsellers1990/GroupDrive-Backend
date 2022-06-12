@@ -8,7 +8,9 @@ router.get("/getBulk", async (req, res) => {
 });
 
 router.get("/getOne", async (req, res) => {
-  const data = await read();
+  const { uid } = req.query;
+
+  const data = await readOne(uid);
 
   res.send(data);
 });
@@ -22,7 +24,7 @@ router.put("/", async (req, res) => {
   console.log({ data });
   if (data) {
     res.send(200);
-  }else {
+  } else {
     res.send(500);
   }
 });
