@@ -5,14 +5,14 @@ mongoose instanceof mongoose.Mongoose; // true
 // Create a new Mongoose instance with its own `connect()`, `set()`, `model()`, etc.
 const m = new mongoose.Mongoose();
 
-var options = {
+const options = {
   user: "root",
   pass: "example",
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
-var connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
+const connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
 
 m.connect(connectionString, options)
   .then(() => {
@@ -22,7 +22,7 @@ m.connect(connectionString, options)
     console.log("no connection ");
   });
 
-var db = m.connection;
+const db = m.connection;
 
 const write = async (uid, userName, coordinate, isOnline) => {
   if (!uid) return false;

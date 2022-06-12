@@ -17,6 +17,8 @@ const test = async () => {
     });
     const producer = kafka.producer()
     await producer.connect()
+    // use uuid gen for topic
+    // push first message to kafka
     await producer.send({
         topic: 'test-topic',
         messages: [
@@ -25,6 +27,8 @@ const test = async () => {
         ],
     })
     await producer.disconnect()
+    // groupId - Event, Peer2Peer, GroupDriveChat
+
     const consumer = kafka.consumer({ groupId: 'test-group' })
     await consumer.connect()
     await consumer.subscribe({ topic: 'test-topic', fromBeginning: true })
