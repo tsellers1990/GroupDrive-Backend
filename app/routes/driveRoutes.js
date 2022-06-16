@@ -16,6 +16,7 @@ const { createDrive } = require("../middleware/pgDriveOperators");
 
 router.put("/createDrive", async (req, res) => {
   const {
+    driveId,
     orginizerUID,
     geoMongoId,
     dateOccuring,
@@ -29,12 +30,13 @@ router.put("/createDrive", async (req, res) => {
 //   console.log({ dateOccurFormatted });
 
   const result = await createDrive(
+    driveId,
     orginizerUID,
     geoMongoId,
     dateOccuring,
     driverLimit,
-    reoccuring
-    // createdAt
+    reoccuring,
+    createdAt
   );
 
   console.log({ result });

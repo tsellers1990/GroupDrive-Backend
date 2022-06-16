@@ -9,22 +9,28 @@ Happened - this will update the drive to it being past tense
 Of note, none of the drives will be removed to retain historical records of drives that have happened
  */
 
+
+// ! add driveId and createdAt in values Table and createDrive
 const createDrive = async (
-  orginizerUID,
+    driveId,
+    orginizerUID,
   geoMongoId,
   dateOccuring,
   driverLimit,
-  reoccuring
+  reoccuring,
+  createdAt
   // ! what else do we need?
 ) => {
   const text =
-    'INSERT INTO public.drives("orginizerUID", "geoMongoId", "dateOccuring", "driverLimit", "reoccuring") VALUES ($1,$2,$3,$4,$5) RETURNING *';
+    'INSERT INTO public.drives("driveId","orginizerUID", "geoMongoId", "dateOccuring", "driverLimit", "reoccuring","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *';
   const values = [
+    driveId,
     orginizerUID,
     geoMongoId,
-    new Date(JSON.parse(dateOccuring)),
+    JSON.parse(dateOccuring),
     driverLimit,
     reoccuring,
+    createdAt
   ];
 
   try {
