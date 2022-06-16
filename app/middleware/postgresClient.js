@@ -1,7 +1,6 @@
 const { Client } = require("pg");
 const e = require("express");
-const client = new Client({
-});
+const client = new Client({});
 client
   .connect()
   .then(() => {
@@ -11,4 +10,4 @@ client
     console.log("no connection to postgres, did something go wrong?");
   });
 
-module.exports = client;
+module.exports = { client };
