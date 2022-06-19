@@ -15,7 +15,7 @@ job("Build and Deploy Backend") {
         }
     }
     container(displayName = "Show pwd", image = "ubuntu") {
-        env["k8s"] = Params("linode_k8s")
+        env["k8s"] = Secrets("linode_k8s")
 
         shellScript {
             content = """
