@@ -9,9 +9,6 @@ job("Hello World!") {
         build {
             file = "./Dockerfile"
             labels["vendor"] = "mycompany"
-
-            // build with another default platform. Learn more
-            customPlatform = "linux/arm"
         }
     }
 }
