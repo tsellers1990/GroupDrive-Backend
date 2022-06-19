@@ -19,8 +19,8 @@ job("Build and Deploy Backend") {
 
         shellScript {
             content = """
-                echo -e ${'$'}k8s
-                echo -e ${'$'}k8s >> /.kube/config
+                echo ${'$'}k8s
+                echo ${'$'}k8s >> /.kube/config
                 cat /.kube/config
                 kubectl get nodes
             """
