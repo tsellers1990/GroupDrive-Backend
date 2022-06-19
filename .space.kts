@@ -10,6 +10,9 @@ job("Hello World!") {
             file = "./Dockerfile"
             labels["vendor"] = "mycompany"
         }
+        push("selrich.registry.jetbrains.space/p/groupdrive/container-artifacts/backend") {
+            tags("0.0.\$JB_SPACE_EXECUTION_NUMBER")
+        }
     }
 }
 
