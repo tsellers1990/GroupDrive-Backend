@@ -14,7 +14,7 @@ const { createDrive } = require("../middleware/pgDriveOperators");
 //   }
 // });
 
-router.post("/createDrive", async (req, res) => {
+router.post("/", async (req, res) => {
   const {
     orginizerUID,
     geoMongoId,
