@@ -11,5 +11,9 @@ job("Hello World!") {
         }
         depth = UNLIMITED_DEPTH
     }
-    container(displayName = "Say Hello", image = "hello-world")
+    container(displayName = "Build", image = "docker"){
+        shellScript {
+            content = "./auto_build.sh"
+        }
+    }
 }
