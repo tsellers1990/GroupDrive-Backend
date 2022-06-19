@@ -5,15 +5,16 @@
 */
 
 job("Hello World!") {
-    git{
-        refSpec{
-            +"main"
-        }
-        depth = UNLIMITED_DEPTH
-    }
-    container(displayName = "Build", image = "docker"){
-        shellScript {
-            content = "./auto_build.sh"
+    docker {
+        build {
+            context = "docker"
+            file = "./docker/Dockerfile"
+            args["HTTP_PROXY"] = "http://10.20.30.2:1234"
+            labels["vendor"] = "mycompany"
+
+            // build with another default platform. Learn more
+            customPlatform = "linux/arm"
         }
     }
 }
+
