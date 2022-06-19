@@ -14,12 +14,14 @@ job("Build and Deploy Backend") {
             tags("0.0.\$JB_SPACE_EXECUTION_NUMBER")
         }
     }
-    container(displayName = "Show pwd", image = "ubuntu") {
+    container(displayName = "Kubectl", image = "bitnami/kubectl") {
         env["k8s"] = Secrets("linode_k8s")
 
         shellScript {
             content = """
-                echo My password for ${'$'}k8s
+                mkdir ~/.kube
+                echo ${'$'}k8s > ~/.kube/config
+                kubectl get nodes
             """
         }
     }
