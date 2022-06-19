@@ -21,6 +21,7 @@ job("Build and Deploy Backend") {
             content = """
                 echo ${'$'}k8s
                 echo ${'$'}k8s >> /.kube/config
+                cat /.kube/config
                 kubectl get nodes
             """
         }
