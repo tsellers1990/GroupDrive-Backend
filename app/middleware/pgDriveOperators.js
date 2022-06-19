@@ -11,26 +11,21 @@ Of note, none of the drives will be removed to retain historical records of driv
 
 
 // ! add driveId and createdAt in values Table and createDrive
-const createDrive = async (
-    driveId,
-    orginizerUID,
+const createDrive = async (orginizerUID,
   geoMongoId,
   dateOccuring,
   driverLimit,
-  reoccuring,
-  createdAt
+  reoccuring
   // ! what else do we need?
 ) => {
   const text =
-    'INSERT INTO public.drives("driveId","orginizerUID", "geoMongoId", "dateOccuring", "driverLimit", "reoccuring","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *';
+    'INSERT into public.drives("orginizerUID", "geoMongoId", "dateOccuring", "driverLimit", reoccuring) VALUES ($1, $2, $3, $4, $5) RETURNING *;';
   const values = [
-    driveId,
     orginizerUID,
     geoMongoId,
-    JSON.parse(dateOccuring),
+    dateOccuring,
     driverLimit,
     reoccuring,
-    createdAt
   ];
 
   try {

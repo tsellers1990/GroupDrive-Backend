@@ -6,8 +6,8 @@ exports.up = pgm => {pgm.createTable('drives', {
     driveId: {
         allowNull: true,
         // what the hecky is giong on with autoIncrement @adam
-        // autoIncrement: true,
-        // primaryKey: true,
+        autoIncrement: true,
+        primaryKey: true,
         type: 'integer',
         defaultValue: 0
     },

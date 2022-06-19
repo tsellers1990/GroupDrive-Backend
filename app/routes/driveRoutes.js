@@ -14,29 +14,25 @@ const { createDrive } = require("../middleware/pgDriveOperators");
 //   }
 // });
 
-router.put("/createDrive", async (req, res) => {
+router.post("/createDrive", async (req, res) => {
   const {
-    driveId,
     orginizerUID,
     geoMongoId,
     dateOccuring,
     driverLimit,
-    reoccuring,
-    createdAt,
-  } = req.query;
-
-//   const dateOccurFormatted = new Date(JSON.parse(dateOccuring));
+    reoccuring
+  } = req.body;
+  console.log(req.body)
+  //   const dateOccurFormatted = new Date(JSON.parse(dateOccuring));
 
 //   console.log({ dateOccurFormatted });
 
   const result = await createDrive(
-    driveId,
     orginizerUID,
     geoMongoId,
     dateOccuring,
     driverLimit,
-    reoccuring,
-    createdAt
+    reoccuring
   );
 
   console.log({ result });
