@@ -4,10 +4,11 @@ exports.shorthands = undefined;
 //Create - This will create a drive, it will take in the orginizerUID, geoJSON ID in mongo, date its occuring, driver limits, and if its a reoccuring meet, topicID of GroupChat
 exports.up = pgm => {pgm.createTable('drives', {
     driveId: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: 'integer',
+        defaultValue: 0
     },
     orginizerUID:{
         allowNull: false,
@@ -19,7 +20,7 @@ exports.up = pgm => {pgm.createTable('drives', {
     },
     dateOccuring:{
         allowNull:false,
-        type: 'time'
+        type: 'integer',
     },
     driverLimit:{
         allowNull:false,
@@ -32,9 +33,9 @@ exports.up = pgm => {pgm.createTable('drives', {
         defaultValue: 0
     },
     createdAt: {
-        type: 'timestamp',
-        notNull: true,
-        default: pgm.func('current_timestamp'),
+        type: 'integer',
+        // notNull: true,
+        defaultValue: new Date()
     },
 })};
 

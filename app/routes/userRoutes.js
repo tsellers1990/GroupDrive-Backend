@@ -23,7 +23,7 @@ router.get("/getUser", async (req, res) => {
   }
 });
 
-router.put("/createUser", async (req, res) => {
+router.post("/createUser", async (req, res) => {
   const {
     uid,
     userName,
