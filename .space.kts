@@ -7,9 +7,7 @@
 job("Hello World!") {
     docker {
         build {
-            context = "docker"
-            file = "./docker/Dockerfile"
-            args["HTTP_PROXY"] = "http://10.20.30.2:1234"
+            file = "./Dockerfile"
             labels["vendor"] = "mycompany"
 
             // build with another default platform. Learn more
