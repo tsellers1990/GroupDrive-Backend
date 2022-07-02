@@ -9,14 +9,14 @@ Unblock - This will take two UIDs, this will update the relationship to rejected
 Remove - This will take two UIDs, it will then remove the entry from the database
 */
 
-/*
-@name: addFriend
-@params: uidIntiator, uidRecipient
-@desc: will create a friend entry in the relationships table, and will set it to pending
-@return:
-*/
+
 const addFriend = (uidA, uidB) => {
-    
+    /*
+ @name: addFriend
+ @params: uidIntiator, uidRecipient
+ @desc: will create a friend entry in the relationships table, and will set it to pending
+ @return:
+ */
 };
 
 /*
@@ -68,3 +68,5 @@ const unblockFriend = (uidA, uidB) => {
 const removeFriend = (uidA, uidB) => {
     
 };
+
+module.exports={addFriend, acceptFriend, rejectFriend, blockUser, unblockFriend, removeFriend};

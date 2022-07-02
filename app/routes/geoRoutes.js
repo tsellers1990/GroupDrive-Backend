@@ -7,8 +7,8 @@ router.get("/getBulk", async (req, res) => {
   res.send(data);
 });
 
-router.get("/getOne", async (req, res) => {
-  const { uid } = req.query;
+router.get("/:uid", async (req, res) => {
+  const { uid } = req.params;
 
   const data = await readOne(uid);
 
@@ -16,8 +16,8 @@ router.get("/getOne", async (req, res) => {
 });
 
 // ! post route
-router.put("/", async (req, res) => {
-  const { uid, userName, coordinate, isOnline } = req.query;
+router.post("/", async (req, res) => {
+  const { uid, userName, coordinate, isOnline } = req.body;
   const data = await write(uid, userName, coordinate, isOnline);
   //? also something to send off
 
