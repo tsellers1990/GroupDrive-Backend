@@ -19,22 +19,22 @@ exports.up = pgm => {pgm.createTable('drives', {
     },
     dateOccuring:{
         allowNull:false,
-        type: 'time'
+        type: 'bigint'
     },
     driverLimit:{
-        allowNull:false,
+        // allowNull:false,
         type: 'integer',
         defaultValue: 20
     },
     reoccuring:{
-        allowNull:false,
+        // allowNull:false,
         type: 'integer',
         defaultValue: 0
     },
     createdAt: {
-        type: 'timestamp',
+        type: 'bigint',
         notNull: true,
-        default: pgm.func('current_timestamp'),
+        // default: pgm.func('current_timestamp'),
     },
 })};
 
