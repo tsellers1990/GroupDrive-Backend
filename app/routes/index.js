@@ -1,13 +1,13 @@
 const router = require("express").Router();
 
-const mongoRoutes = require("./mongoRoutes");
+const geoRoutes = require("./geoRoutes");
 const chatRoutes = require("./chatRoutes");
 const userRoutes = require("./userRoutes")
 const friendRoutes = require("./friendRoutes")
 const driveRoutes = require("./driveRoutes")
 const kafkaRoutes = require("./kafkaRoutes")
 
-router.use("/mongo", mongoRoutes)
+router.use("/geo", geoRoutes)
 router.use("/chat", chatRoutes)
 router.use("/user", userRoutes)
 router.use("/friend", friendRoutes)
