@@ -17,14 +17,15 @@ router.get("/:uid", async (req, res) => {
 
 // ! post route
 router.post("/", async (req, res) => {
+  console.log('req.body',req.body);
   const { uid, userName, coordinate, isOnline } = req.body;
   const data = write(uid, userName, coordinate, isOnline);
   //? also something to send off
 
   data.then((data) => {
-    console.log(data);
+    console.log('data returned from promise',data);
     if (data) {
-      res.sendStatus(200);
+      res.status(200).send(data);
     } else {
       res.sendStatus(500);
     }

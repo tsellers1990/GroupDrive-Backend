@@ -16,7 +16,7 @@ mongoose.connect(`mongodb://mongo_db:27017/local?authSource=admin`, options)
   });
 
 
-const geoSchema = new m.Schema(
+const geoSchema = new mongoose.Schema(
   {
     _id: String,
     userName: String,
@@ -28,3 +28,32 @@ const geoSchema = new m.Schema(
 
   }
 );
+
+const GeoRoute = new mongoose.model('geoRoute', geoSchema);
+
+const write = async (uid, userName, coordinate, isOnline) => {
+  console.log('in write');
+  let geo = {
+    _id: uid,
+    userName: userName,
+    coordinate: coordinate,
+    isOnline: isOnline
+  }
+
+  return GeoRoute.findOneAndUpdate({_id: uid},geo,{upsert: true}).exec();
+
+  
+}
+
+const read = async () => {
+  console.log('in read');
+  return "reading in mongoConnection"
+}
+
+const readOne = async () => {
+  console.log('in readOne');
+}
+
+
+
+module.exports = { write, read, readOne };
