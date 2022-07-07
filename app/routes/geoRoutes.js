@@ -18,15 +18,18 @@ router.get("/:uid", async (req, res) => {
 // ! post route
 router.post("/", async (req, res) => {
   const { uid, userName, coordinate, isOnline } = req.body;
-  const data = await write(uid, userName, coordinate, isOnline);
+  const data = write(uid, userName, coordinate, isOnline);
   //? also something to send off
 
-  console.log({ data });
-  if (data) {
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(500);
-  }
+  data.then((data) => {
+    console.log(data);
+    if (data) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(500);
+    }
+
+  })
 });
 
 //
