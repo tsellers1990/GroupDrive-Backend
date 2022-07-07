@@ -14,3 +14,17 @@ mongoose.connect(`mongodb://mongo_db:27017/local?authSource=admin`, options)
   .catch((e) => {
     console.log("no connection ");
   });
+
+
+const geoSchema = new m.Schema(
+  {
+    _id: String,
+    userName: String,
+    coordinate: [{lat: String, long: String}],
+    isOnline: {
+      type: Boolean,
+      default: false
+    }
+
+  }
+);
