@@ -23,9 +23,9 @@ router.post("/", async (req, res) => {
 
   console.log({ data });
   if (data) {
-    res.send(200);
+    res.sendStatus(200);
   } else {
-    res.send(500);
+    res.sendStatus(500);
   }
 });
 

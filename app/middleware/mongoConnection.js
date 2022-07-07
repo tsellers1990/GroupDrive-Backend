@@ -15,15 +15,13 @@ const options = {
 
 const connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
 
-m.connect(connectionString, options)
+m.createConnection(connectionString, options)
   .then(() => {
     console.log("mongo connection is successfull");
   })
   .catch((e) => {
     console.log("no connection ");
   });
-
-const db = m.connection;
 
 const geoSchema = new m.Schema(
   {
@@ -38,7 +36,7 @@ const geoSchema = new m.Schema(
   }
 );
 
-const geoRoute = new m.model('geoRoute', geoSchema);
+const GeoRoute = new m.model('geoRoute', geoSchema);
 
 const write = async (uid, userName, coordinate, isOnline) => {
   console.log('in write');
@@ -49,11 +47,21 @@ const write = async (uid, userName, coordinate, isOnline) => {
     isOnline: isOnline
   }
 
-  return geoRoute.findOneAndUpdate({_id: uid},geo,{upsert: true}).exec();
+  GeoRoute.findOneAndUpdate({_id: uid},geo,{upsert: true}).exec()
+    .then(()=> {
+      return true;
+    })
+    .catch((err)=> {
+      console.log(err);
+      return false;
+    })
+
+  
 }
 
 const read = async () => {
   console.log('in read');
+  return "reading in mongoConnection"
 }
 
 const readOne = async () => {
