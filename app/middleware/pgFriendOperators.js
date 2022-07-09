@@ -9,14 +9,58 @@ Unblock - This will take two UIDs, this will update the relationship to rejected
 Remove - This will take two UIDs, it will then remove the entry from the database
 */
 
+const getFriends = async (uid) =>{
+    const text = `SELECT * FROM public.friends WHERE ("uidA") = $1`;
+    const values = [uid];
+    console.log(uid)
+    const response = await client
+    .query(text, values)
+    .then((res) => {
+    //   console.log(res.rows[0]);
+      return res.rows;
+    })
+    .catch((e) => {
+      console.error(e.stack);
+      return { err: e };
+    });
 
-const addFriend = (uidA, uidB) => {
+  if (!response.err) {
+    return { response };
+  } else {
+    return { response };
+  }
+
+
+};
+const addFriend = async (uidA, uidB, relationship) => {
     /*
  @name: addFriend
  @params: uidIntiator, uidRecipient
  @desc: will create a friend entry in the relationships table, and will set it to pending
  @return:
  */
+
+  const text = `INSERT INTO public.friends("uidA", "uidB", relationship) VALUES ($1,$2, $3) RETURNING *`;
+  const values = [uidA, uidB, relationship];
+
+  const response = await client
+    .query(text, values)
+    .then((res) => {
+      console.log(res.rows[0]);
+      return true;
+    })
+    .catch((e) => {
+      console.error(e.stack);
+      return { err: e };
+    });
+
+  if (!response.err) {
+    return { response };
+  } else {
+    return { response };
+  }
+
+
 };
 
 /*
@@ -69,4 +113,4 @@ const removeFriend = (uidA, uidB) => {
     
 };
 
-module.exports={addFriend, acceptFriend, rejectFriend, blockUser, unblockFriend, removeFriend};
+module.exports={getFriends, addFriend, acceptFriend, rejectFriend, blockUser, unblockFriend, removeFriend};
