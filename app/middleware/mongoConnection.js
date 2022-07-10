@@ -31,7 +31,7 @@ const geoSchema = new mongoose.Schema(
 
 const GeoRoute = new mongoose.model('geoRoute', geoSchema);
 
-const write = async (uid, userName, coordinate, isOnline) => {
+const writeLocation = async (uid, userName, coordinate, isOnline) => {
   console.log('in write');
   let geo = {
     _id: uid,
@@ -45,16 +45,16 @@ const write = async (uid, userName, coordinate, isOnline) => {
   
 }
 
-const read = async () => {
+const readLocation = async () => {
   console.log('in read');
   return GeoRoute.find({});
 }
 
-const readOne = async (uid) => {
+const readOneLocation = async (uid) => {
   console.log('in read one', uid);
   return GeoRoute.find({_id: uid});
 }
 
 
 
-module.exports = { write, read, readOne };
+module.exports = { writeLocation, readLocation, readOneLocation };
