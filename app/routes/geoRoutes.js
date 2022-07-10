@@ -1,10 +1,10 @@
-const { write, read, readOne } = require("../middleware/mongoConnection");
+const { writeGeo, readGeo, readOneGeo } = require("../middleware/mongoConnection");
 const router = require("express").Router();
 
 router.get("/", async (req, res) => {
 
-  if(req.body.uid) {
-    const data = readOne(req.body.uid);
+  if(req.body.postGresID) {
+    const data = readOneGeo(req.body.postGresID);
 
     data.then((data) => {
       res.status(200).send(data);
@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     })
 
   } else {
-    const data = read();
+    const data = readGeo();
   
     data.then((data) => {
       res.status(200).send(data);
@@ -30,12 +30,30 @@ router.get("/", async (req, res) => {
 
 // ! post route
 router.post("/", async (req, res) => {
-  console.log('req.body',req.body);
-  const { uid, userName, coordinate, isOnline } = req.body;
-  const data = write(uid, userName, coordinate, isOnline);
-  //? also something to send off
+  // destructure whatever you need from the req and pass into the postgres table  
+  const {postGresID, geoJSONData} = req.body;
 
-  data.then((data) => {
+  //postgres.addToTable()
+  //.then((postgresID) => {
+  //    const data = writeGeo(postgresID, geoJSONData);
+  //})
+  //.catch((err) => {
+  //  console.log(err);
+  //  res.sendStatus(500)
+  //})
+  //.then(() => {
+  //  res.sendStatus(201);
+  //})
+  //.catch((err) => {
+  //  console.log(err)
+  //  res.sendStatus(500);
+  //})
+
+
+  //get rid of this and do it all inside the first .then after postgres promise resolves
+  const data = writeGeo(postGresID,geoJSONData);
+
+  data.then(() => {
     res.sendStatus(201);
   })
   .catch((err) => {

@@ -16,7 +16,10 @@ mongoose.connect(`mongodb://mongo_db:27017/local?authSource=admin`, options)
   });
 
 
-const geoSchema = new mongoose.Schema(
+
+//Mongo UserLocation Starts Here  
+
+const userLocationSchema = new mongoose.Schema(
   {
     _id: String,
     userName: String,
@@ -29,7 +32,7 @@ const geoSchema = new mongoose.Schema(
   }
 );
 
-const GeoRoute = new mongoose.model('geoRoute', geoSchema);
+const LiveLocation = new mongoose.model('liveLocation', userLocationSchema);
 
 const writeLocation = async (uid, userName, coordinate, isOnline) => {
   console.log('in write');
@@ -40,21 +43,62 @@ const writeLocation = async (uid, userName, coordinate, isOnline) => {
     isOnline: isOnline
   }
 
-  return GeoRoute.findOneAndUpdate({_id: uid},geo,{upsert: true}).exec();
+  return LiveLocation.findOneAndUpdate({_id: uid},geo,{upsert: true}).exec();
 
   
 }
 
 const readLocation = async () => {
   console.log('in read');
-  return GeoRoute.find({});
+  return LiveLocation.find({});
 }
 
 const readOneLocation = async (uid) => {
   console.log('in read one', uid);
-  return GeoRoute.find({_id: uid});
+  return LiveLocation.find({_id: uid});
 }
 
 
 
-module.exports = { writeLocation, readLocation, readOneLocation };
+// MONGO GEOROUTES STARTS HERE //
+
+
+const geoSchema = new mongoose.Schema(
+  {
+    _id: String,
+    geoJSONData: String
+
+  }
+);
+
+const GeoRoute = new mongoose.model('geoRoute', geoSchema);
+
+const writeGeo = async (postGresID, coordinates) => {
+  console.log('in write');
+  let geo = {
+    _id: postGresID,
+    geoJSONData: coordinates
+  }
+
+  return GeoRoute.findOneAndUpdate({_id: postGresID},geo,{upsert: true}).exec();
+
+  
+}
+
+const readGeo = async () => {
+  console.log('in read');
+  return GeoRoute.find({});
+}
+
+const readOneGeo = async (postGresID) => {
+  console.log('in read one', postGresID);
+  return GeoRoute.find({_id: postGresID});
+}
+
+
+
+
+
+
+
+module.exports = { writeLocation, readLocation, readOneLocation, writeGeo, readGeo, readOneGeo };
