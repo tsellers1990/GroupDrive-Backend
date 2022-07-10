@@ -20,7 +20,7 @@ const geoSchema = new mongoose.Schema(
   {
     _id: String,
     userName: String,
-    coordinate: [{lat: String, long: String}],
+    coordinate: String,
     isOnline: {
       type: Boolean,
       default: false
@@ -47,11 +47,12 @@ const write = async (uid, userName, coordinate, isOnline) => {
 
 const read = async () => {
   console.log('in read');
-  return "reading in mongoConnection"
+  return GeoRoute.find({});
 }
 
-const readOne = async () => {
-  console.log('in readOne');
+const readOne = async (uid) => {
+  console.log('in read one', uid);
+  return GeoRoute.find({_id: uid});
 }
 
 

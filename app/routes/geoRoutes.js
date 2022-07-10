@@ -1,18 +1,31 @@
 const { write, read, readOne } = require("../middleware/mongoConnection");
 const router = require("express").Router();
 
-router.get("/getBulk", async (req, res) => {
-  const data = await read();
+router.get("/", async (req, res) => {
 
-  res.send(data);
-});
+  if(req.body.uid) {
+    const data = readOne(req.body.uid);
 
-router.get("/:uid", async (req, res) => {
-  const { uid } = req.params;
+    data.then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    })
 
-  const data = await readOne(uid);
+  } else {
+    const data = read();
+  
+    data.then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    })
+  }
 
-  res.send(data);
 });
 
 // ! post route
@@ -23,13 +36,11 @@ router.post("/", async (req, res) => {
   //? also something to send off
 
   data.then((data) => {
-    console.log('data returned from promise',data);
-    if (data) {
-      res.status(200).send(data);
-    } else {
-      res.sendStatus(500);
-    }
-
+    res.sendStatus(201);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
   })
 });
 
