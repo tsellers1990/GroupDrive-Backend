@@ -1,10 +1,5 @@
 const mongoose = require("mongoose");
 
-mongoose instanceof mongoose.Mongoose; // true
-
-// Create a new Mongoose instance with its own `connect()`, `set()`, `model()`, etc.
-const m = new mongoose.Mongoose();
-
 const options = {
   user: "root",
   pass: "example",
@@ -12,9 +7,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const connectionString = "mongodb://mongo_db:27017/local?authSource=admin";
-
-m.connect(connectionString, options)
+mongoose.connect(`mongodb://mongo_db:27017/local?authSource=admin`, options)
   .then(() => {
     console.log("mongo connection is successfull");
   })
@@ -22,82 +15,90 @@ m.connect(connectionString, options)
     console.log("no connection ");
   });
 
-const db = m.connection;
 
-const write = async (uid, userName, coordinate, isOnline) => {
-  if (!uid) return false;
-  if (!isOnline)
-    return await db
-      .useDb("local")
-      .collection("geo-location")
-      .findOneAndReplace({ _id: uid }, { isOnline: false });
 
-  // ! this will replace an existing UID in the table, BUT does not create if none exist
-  const putResult = await db
-    .useDb("local")
-    .getCollection("geo-location")
-    .findOneAndReplace(
-      { _id: uid },
-      {
-        _id: uid,
-        userName,
-        coordinate,
-        isOnline,
-      }
-    )
-    .then((res) => {
-      if (!res.lastErrorObject.updatedExisting) {
-        // ! trigger create new instance
-        db.collection("geo-location")
-          .insertOne({
-            _id: uid,
-            userName,
-            coordinate,
-            isOnline,
-          })
-          .then((res) => {
-            return true;
-          });
-      }
-      return true;
-    });
-  return putResult;
-};
+//Mongo UserLocation Starts Here  
 
-const read = async () => {
-  const data = [];
-  await db
-    .useDb("local")
-    .collection("geo-location")
-    .find({}, function (err, res) {
-      if (err) return false;
-      else {
-        return res;
-      }
-    })
-    .forEach((dbUserGeo) => {
-      data.push(dbUserGeo);
-    });
+const userLocationSchema = new mongoose.Schema(
+  {
+    _id: String,
+    userName: String,
+    coordinate: String,
+    isOnline: {
+      type: Boolean,
+      default: false
+    }
 
-  return data;
-};
+  }
+);
 
-const readOne = async (uid) => {
-  const data = [];
-  await db
-    .useDb("local")
-    .collection("geo-location")
-    .find({ _id: uid }, function (err, res) {
-      if (err) return false;
-      else {
-        return res;
-      }
-    })
-    .forEach((dbUserGeo) => {
-      data.push(dbUserGeo);
-    });
+const LiveLocation = new mongoose.model('liveLocation', userLocationSchema);
 
-  return data;
-};
+const writeLocation = async (uid, userName, coordinate, isOnline) => {
+  console.log('in write');
+  let geo = {
+    _id: uid,
+    userName: userName,
+    coordinate: coordinate,
+    isOnline: isOnline
+  }
 
-module.exports = { write, read, readOne };
+  return LiveLocation.findOneAndUpdate({_id: uid},geo,{upsert: true}).exec();
+
+  
+}
+
+const readLocation = async () => {
+  console.log('in read');
+  return LiveLocation.find({});
+}
+
+const readOneLocation = async (uid) => {
+  console.log('in read one', uid);
+  return LiveLocation.find({_id: uid});
+}
+
+
+
+// MONGO GEOROUTES STARTS HERE //
+
+
+const geoSchema = new mongoose.Schema(
+  {
+    _id: String,
+    geoJSONData: String
+
+  }
+);
+
+const GeoRoute = new mongoose.model('geoRoute', geoSchema);
+
+const writeGeo = async (postGresID, coordinates) => {
+  console.log('in write');
+  let geo = {
+    _id: postGresID,
+    geoJSONData: coordinates
+  }
+
+  return GeoRoute.findOneAndUpdate({_id: postGresID},geo,{upsert: true}).exec();
+
+  
+}
+
+const readGeo = async () => {
+  console.log('in read');
+  return GeoRoute.find({});
+}
+
+const readOneGeo = async (postGresID) => {
+  console.log('in read one', postGresID);
+  return GeoRoute.find({_id: postGresID});
+}
+
+
+
+
+
+
+
+module.exports = { writeLocation, readLocation, readOneLocation, writeGeo, readGeo, readOneGeo };
