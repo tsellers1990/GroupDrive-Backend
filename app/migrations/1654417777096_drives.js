@@ -16,7 +16,7 @@ exports.up = pgm => {pgm.createTable('drives', {
     },
     geoMongoId:{
         allowNull:false,
-        type: 'integer'
+        type: 'varchar(255)'
     },
     dateOccuring:{
         allowNull:false,

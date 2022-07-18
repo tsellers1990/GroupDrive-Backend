@@ -2,30 +2,32 @@
 
 exports.shorthands = undefined;
 
-exports.up = pgm => {pgm.createTable('driveRoutes', {
+exports.up = (pgm) => {
+  pgm.createTable("driveRoutes", {
     routeId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: 'integer',
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: "integer",
     },
     routeName: {
-        allowNull: false,
-        type: 'varchar(100)'
+      allowNull: false,
+      type: "varchar(100)",
     },
-    tags:{
-        allowNull: true,
-        type: 'varchar(500)'
+    tags: {
+      allowNull: true,
+      type: "varchar(500)",
     },
-    mongoGeoID: {
-        allowNull: false,
-        type: 'integer'
+    geoMongoId: {
+      allowNull: false,
+      type: "varchar(255)",
     },
     createdAt: {
-        type: 'timestamp',
-        notNull: true,
-        default: pgm.func('current_timestamp'),
+      type: "timestamp",
+      notNull: true,
+      default: pgm.func("current_timestamp"),
     },
-})};
+  });
+};
 
-exports.down = pgm => {};
+exports.down = (pgm) => {};

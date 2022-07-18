@@ -6,7 +6,11 @@ const {
   updateDrive,
 } = require("../middleware/pgDriveOperators");
 
-// * Drives
+const {
+  writeGeo
+} = require("../middleware/mongoConnection")
+
+// * GroupDrives
 router.get("/drives", async (req, res) => {
   const result = await readDrives();
   console.log(result);
@@ -18,13 +22,17 @@ router.get("/drives", async (req, res) => {
 });
 
 router.put("/createDrive", async (req, res) => {
-  const { orginizerUID, geoMongoId, dateOccuring } = req.query;
+  const { orginizerUID, dateOccuring, geoJSONData } = req.query;
 
   const createdAt = new Date().getTime();
 
+  const data = await writeGeo(geoJSONData);
+  const geoId = data.id
+  console.log({geoId})
+
   const result = await createDrive(
     orginizerUID,
-    geoMongoId,
+    geoId,
     dateOccuring,
     createdAt
   );
@@ -40,7 +48,6 @@ router.delete("/delete", async (req, res) => {
   const { driveId } = req.query;
 
   const result = await deleteDrive(driveId);
-  console.log("js , 42, bitch", {result, driveId});
   if (!result.err) {
     res.send(result);
   } else {

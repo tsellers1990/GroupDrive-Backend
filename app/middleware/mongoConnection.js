@@ -57,23 +57,23 @@ const readOneLocation = async (uid) => {
 // MONGO GEOROUTES STARTS HERE //
 
 const geoSchema = new mongoose.Schema({
-  _id: String,
   geoJSONData: String,
 });
 
 const GeoRoute = new mongoose.model("geoRoute", geoSchema);
 
-const writeGeo = async (postGresID, coordinates) => {
+const writeGeo = async (coordinates) => {
   console.log("in write");
   let geo = {
-    _id: postGresID,
     geoJSONData: coordinates,
   };
 
-  return GeoRoute.findOneAndUpdate({ _id: postGresID }, geo, {
-    upsert: true,
-  }).exec();
+  const newDoc = new GeoRoute(geo);
+
+  return newDoc.save()
 };
+
+//TODO: const updateGeo = () => {}
 
 const readGeo = async () => {
   console.log("in read");
