@@ -6,10 +6,12 @@ Interested - will take two UIDs, the first being the driveUID and the second bei
 Remove - will take two UIDs, the first being the driveUID and the second being the userUID, this will remove the entry for the user being in/interested for the drive
 */
 
-const temp = async () => {
-    console.log("temp function called")
+const addDrivemember = async () => {
+    console.log("addDrivemember function called")
+
+    
 
     return true
 }
 
-module.exports = {temp}
+module.exports = {addDrivemember}

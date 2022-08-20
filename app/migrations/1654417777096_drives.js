@@ -2,41 +2,47 @@
 
 exports.shorthands = undefined;
 //Create - This will create a drive, it will take in the orginizerUID, geoJSON ID in mongo, date its occuring, driver limits, and if its a reoccuring meet, topicID of GroupChat
-exports.up = pgm => {pgm.createTable('drives', {
+exports.up = (pgm) => {
+  pgm.createTable("drives", {
     driveId: {
-        allowNull: true,
-        autoIncrement: true,
-        primaryKey: true,
-        type: 'integer',
-        defaultValue: 0
+      allowNull: true,
+      autoIncrement: true,
+      primaryKey: true,
+      type: "integer",
+      defaultValue: 0,
     },
-    orginizerUID:{
-        allowNull: false,
-        type: 'integer'
+    orginizerUID: {
+      allowNull: false,
+      type: "integer",
     },
-    geoMongoId:{
-        allowNull:false,
-        type: 'varchar(255)'
+    geoMongoId: {
+      allowNull: false,
+      type: "varchar(255)",
     },
-    dateOccuring:{
-        allowNull:false,
-        type: 'bigint'
+    dateOccuring: {
+      allowNull: false,
+      type: "bigint",
     },
-    driverLimit:{
-        // allowNull:false,
-        type: 'integer',
-        defaultValue: 20
+    driverLimit: {
+      // allowNull:false,
+      type: "integer",
+      defaultValue: 20,
     },
-    reoccuring:{
-        // allowNull:false,
-        type: 'integer',
-        defaultValue: 0
+    reoccuring: {
+      // allowNull:false,
+      type: "integer",
+      defaultValue: 0,
     },
     createdAt: {
-        type: 'bigint',
-        notNull: true,
-        // default: pgm.func('current_timestamp'),
+      type: "bigint",
+      notNull: true,
+      // default: pgm.func('current_timestamp'),
     },
-})};
+    driveMembers: {
+      type: "text[]",
+    //   default: [],
+    },
+  });
+};
 
-exports.down = pgm => {};
+exports.down = (pgm) => {};
