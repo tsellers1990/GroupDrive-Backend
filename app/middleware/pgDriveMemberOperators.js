@@ -6,7 +6,7 @@ Interested - will take two UIDs, the first being the driveUID and the second bei
 Remove - will take two UIDs, the first being the driveUID and the second being the userUID, this will remove the entry for the user being in/interested for the drive
 */
 
-const addDrivemember = async (driveId, memberUid) => {
+const addDriveMember = async (driveId, memberUid) => {
   const text = `UPDATE public.drives SET "driveMembers" = array_append("driveMembers",$2) WHERE "driveId" = $1 RETURNING *`;
   const values = [driveId, memberUid];
 
@@ -28,4 +28,26 @@ const addDrivemember = async (driveId, memberUid) => {
   }
 };
 
-module.exports = { addDrivemember };
+const removeDriveMember = async (driveId, memberUid) => {
+  const text = `UPDATE public.drives SET "driveMembers" = array_remove("driveMembers",$2) WHERE "driveId" = $1 RETURNING *`;
+  const values = [driveId, memberUid];
+
+  const response = await client
+    .query(text, values)
+    .then((res) => {
+      console.log(res.rows[0]);
+      return true;
+    })
+    .catch((e) => {
+      console.error(e.stack);
+      return { err: e };
+    });
+
+  if (!response.err) {
+    return { response, driveId };
+  } else {
+    return { response };
+  }
+};
+
+module.exports = { addDriveMember, removeDriveMember };
