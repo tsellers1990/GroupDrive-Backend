@@ -5,3 +5,4 @@ logs.txt
 /mongo_data/*
 /log/*
 /postgres_data/*
+firebase-secret.json
