@@ -2,18 +2,20 @@ const admin = require('./firebase-config.js')
 
 class AuthMiddleware {
     async decodeToken(req,res,next) {
-        const token = req.headers.authorization.split(" ")[1] || "noToken";
-        // console.log(admin);
+        const token = req.headers.authorization || "noToken";
+        // console.log(req.headers.authorization);
         try {
             const decodeValue = await admin.auth().verifyIdToken(token);
             if(decodeValue){
-                return next(req,res);
+                // console.log("decode complete");
+                next();
             } else {
-                return res.sendStatus(401);
+                console.log("jwt failed");
+                res.sendStatus(401);
             }
         } catch (err) {
-            // console.log("caught error!", err);
-            return res.status(500).send("firebase auth error!");
+            // console.log("caught error!", err);   
+            res.status(500).send("firebase auth error!");
         }
     }
 }

@@ -1,22 +1,12 @@
 const firebaseMiddle = require("../middleware/authMiddleware/index");
+const router = require("express").Router();
 
 // * Users
-router.get("/jwt", async (req, res) => {
-  const { email, password } = req.query;
+router.get("/jwt",firebaseMiddle.decodeToken, (req, res) => {
+  res.status(200).send("JWT good");
 
-
-  
-
-
-  //   try {
-  // let response = await
-  //     if (response) {
-  //       res.json(response);
-  //     } else {
-  //       res.send(500);
-  //     }
-  //   } catch (e) {
-  //     console.log("caught something, getuser", e);
-  //     res.send(500);
-  //   }
 });
+
+
+module.exports = router;
+
