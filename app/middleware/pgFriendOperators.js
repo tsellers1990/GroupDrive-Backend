@@ -51,7 +51,7 @@ const addFriend = async (uidA, uidB, relationship) => {
     })
     .catch((e) => {
       console.error(e.stack);
-      return { err: e };
+      return e;
     });
 
   if (!response.err) {
