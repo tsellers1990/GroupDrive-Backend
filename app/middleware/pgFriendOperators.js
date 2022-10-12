@@ -11,31 +11,31 @@ Remove - This will take two UIDs, it will then remove the entry from the databas
 
 const getFriends = async (uid) =>{
     const text = `
-      WITH userfriends AS (
-        SELECT uuidB
-        FROM friends
-        WHERE uuidA = $1
-        UNION
-        SELECT uuidA
+    WITH userfriends AS (
+      SELECT 'public.friends.uidB'
       FROM friends
-      WHERE uuidB = $1
-      )
+      WHERE 'uidA' = $1
+    UNION
+      SELECT 'public.friends.uidA'
+      FROM friends
+      WHERE 'uidB' = $1
+  )
 
-      SELECT json_agg(friends)
-      FROM
+  SELECT json_agg(friends)
+  FROM
+  (
+    SELECT
       (
-      SELECT 
-        (
-          SELECT json_agg(friendinfo) as friendinfo
-          FROM
-            (
-              SELECT *
-              FROM users
-              WHERE uuid= friend.uuidb
-            ) as friendinfo
-        )
-      FROM userfriends as friend
-      ) as friends
+        SELECT json_agg(friendinfo) as friendinfo
+        FROM
+          (
+            SELECT *
+            FROM users
+            WHERE uid = 'friend.uidB'
+          ) as friendinfo
+      )
+    FROM userfriends as friend
+  ) as friends
     `;
     const values = [uid];
     console.log(uid)
