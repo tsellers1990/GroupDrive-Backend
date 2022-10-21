@@ -18,14 +18,15 @@ router.get("/", async (req, res) => {
         res.sendStatus(500);
       });
   } else {
+    console.log("getting all userGeos");
     const locations = readLocation();
     locations
       .then((data) => {
         const arr = data
           .filter((userBlock) => {
-            if (req.body.requesterUid !== userBlock._id) {
-              return true;
-            }
+            // if (req.params.requesterUid !== userBlock._id) {
+            return true;
+            // }
           })
           .map((dave) => {
             const { coordinate, _id, userName } = dave;
@@ -47,19 +48,24 @@ router.get("/", async (req, res) => {
 
 // ! post route
 router.put("/", async (req, res) => {
-  console.log("req.body", req.body);
-  const { uid, userName, coordinate, isOnline } = req.body;
-  const data = writeLocation(uid, userName, coordinate, isOnline);
-  //? also something to send off
-
-  data
-    .then((data) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500);
-    });
+  console.log("req.body", req.query);
+  const { uid, userName, coordinate, isOnline = true } = req.query;
+  console.log({ uid });
+  if(coordinate?.latitude && coordinate?.longitude){
+    const data = writeLocation(uid, userName, coordinate, isOnline);
+    //? also something to send off
+  
+    data
+      .then((data) => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(500);
+      });
+  } else {
+    res.sendStatus(500)
+  }
 });
 
 //
