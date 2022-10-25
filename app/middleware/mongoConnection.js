@@ -21,17 +21,25 @@ mongoose
 const userLocationSchema = new mongoose.Schema({
   _id: String,
   userName: String,
-  coordinate: String,
   isOnline: {
     type: Boolean,
     default: false,
+  },
+  coordinate: {
+    accuracy: Number,
+    altitude: Number,
+    altitudeAccuracy: Number,
+    heading: Number,
+    latitude: Number,
+    longitude: Number,
+    speed: Number,
   },
 });
 
 const LiveLocation = new mongoose.model("liveLocation", userLocationSchema);
 
 const writeLocation = async (uid, userName, coordinate, isOnline) => {
-  console.log("in write");
+  console.log("in write", {uid, userName, coordinate,isOnline});
   let geo = {
     _id: uid,
     userName: userName,
@@ -45,8 +53,7 @@ const writeLocation = async (uid, userName, coordinate, isOnline) => {
 };
 
 const readLocation = async () => {
-  console.log("in read");
-  return LiveLocation.find({});
+  return LiveLocation.find({isOnline: true});
 };
 
 const readOneLocation = async (uid) => {
@@ -70,7 +77,7 @@ const writeGeo = async (coordinates) => {
 
   const newDoc = new GeoRoute(geo);
 
-  return newDoc.save()
+  return newDoc.save();
 };
 
 //TODO: const updateGeo = () => {}
