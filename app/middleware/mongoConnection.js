@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const options = {
-  user: "root",
-  pass: "example",
+  user: process.env.MONGO_USER,
+  pass: process.env.MONGO_PASS,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
 mongoose
-  .connect(`mongodb://mongo_db:27017/local?authSource=admin`, options)
+  .connect(process.env.MONGO_CONNECTION_STRING, options)
   .then(() => {
     console.log("mongo connection is successfull");
   })

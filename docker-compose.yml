@@ -11,6 +11,9 @@ services:
       PGDATABASE: 'group_drive'
       PGPASSWORD: 'example'
       PGPORT: 5432
+      MONGO_USER: 'root'
+      MONGO_PASS: 'example'
+      MONGO_CONNECTION_STRING: 'mongodb://mongo_db:27017/local?authSource=admin'
       MQTT_CLEAN_SESSION: 'true'
       MQTT_CONNECT_TIMEOUT: 4000
       MQTT_CLIENT_ID: 'GD_BACKEND_CONSUMER'
