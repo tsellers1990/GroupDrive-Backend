@@ -11,6 +11,13 @@ services:
       PGDATABASE: 'group_drive'
       PGPASSWORD: 'example'
       PGPORT: 5432
+      MQTT_CLEAN_SESSION: 'true'
+      MQTT_CONNECT_TIMEOUT: 4000
+      MQTT_CLIENT_ID: 'GD_BACKEND_CONSUMER'
+      MQTT_CLIENT_USER: 'foo'
+      MQTT_CLIENT_PASSWORD: 'bar'
+      MQTT_BROKER: 'wss://mqtt-ws.dev.groupdrive.app:443/'
+
     volumes:
       - ./app/:/usr/src/app
       - ./log:/var/log
