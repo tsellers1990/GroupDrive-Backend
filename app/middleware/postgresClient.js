@@ -10,4 +10,4 @@ client
     console.log("no connection to postgres, did something go wrong?");
   });
 
-module.exports = { client };
+module.exports = client;

@@ -1,4 +1,6 @@
+// const client = require("../middleware/postgresClient");
 const client = require("../middleware/postgresClient");
+
 
 /*
 @name: createUser
@@ -50,7 +52,7 @@ const readUser = async (uid, userName, isPass) => {
   let text;
   let values;
   //handles the lookup of a user when UID is not known
-  console.log({ isPass });
+  console.log({ uid, userName, isPass });
   if (!userName) {
     text =
       isPass === true

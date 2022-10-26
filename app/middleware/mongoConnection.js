@@ -39,7 +39,6 @@ const userLocationSchema = new mongoose.Schema({
 const LiveLocation = new mongoose.model("liveLocation", userLocationSchema);
 
 const writeLocation = async (uid, userName, coordinate, isOnline) => {
-  console.log("in write", {uid, userName, coordinate,isOnline});
   let geo = {
     _id: uid,
     userName: userName,
