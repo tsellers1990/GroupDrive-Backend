@@ -56,7 +56,6 @@ router.put("/", async (req, res) => {
     const response = await writeLocation(uid, userName, parseCoords, isOnline);
     //? also something to send off
 
-    console.log({response})
     if (response) {
       res.sendStatus(201)
     } else {

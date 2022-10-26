@@ -4,7 +4,7 @@ const userOperators = require("../middleware/pgUserOperators");
 // * Users
 router.get("/getUser", async (req, res) => {
   const { uid, userName } = req.query;
-  const isPass = req?.query?.isPass;
+  const isPass = req?.query?.isPass || false;
 
   try {
     let response = await userOperators.readUser(
@@ -15,11 +15,11 @@ router.get("/getUser", async (req, res) => {
     if (response) {
       res.json(response);
     } else {
-      res.send(500);
+      res.sendStatus(500);
     }
   } catch (e) {
     console.log("caught something, getuser", e);
-    res.send(500);
+    res.sendStatus(500);
   }
 });
 
@@ -46,12 +46,13 @@ router.post("/createUser", async (req, res) => {
     );
 
     if (response) {
-      res.send(200);
+      res.sendStatus(200);
     } else {
-      res.send(500);
+      res.sendStatus(500);
     }
   } catch (e) {
-    console.log("caught something");
+    console.log({e});
+    res.sendStatus(500)
   }
 });
 

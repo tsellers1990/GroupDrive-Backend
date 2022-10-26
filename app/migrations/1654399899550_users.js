@@ -17,7 +17,7 @@ exports.up = pgm => {pgm.createTable('users', {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: 'integer',
+        type: 'varchar',
     },
     userName: { type: 'varchar(500)',
         notNull: true,
