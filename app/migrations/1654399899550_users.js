@@ -23,10 +23,6 @@ exports.up = pgm => {pgm.createTable('users', {
         notNull: true,
         unique: true,
     },
-    password: {
-        type: 'varchar(10000)',
-        notNull: true
-    },
     carType: {
         type: 'varchar(1000)',
         notNull: true,

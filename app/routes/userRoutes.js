@@ -27,7 +27,6 @@ router.post("/createUser", async (req, res) => {
   const {
     uid,
     userName,
-    password,
     carType,
     displayName,
     numDrives,
@@ -38,7 +37,6 @@ router.post("/createUser", async (req, res) => {
     let response = await userOperators.createUser(
       uid,
       userName,
-      password,
       carType,
       displayName,
       numDrives,
