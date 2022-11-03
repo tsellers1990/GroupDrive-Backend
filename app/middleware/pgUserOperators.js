@@ -11,18 +11,16 @@ const client = require("../middleware/postgresClient");
 const createUser = async (
   uid,
   userName,
-  password,
   carType,
   displayName,
-  numDrives,
+  numDrives = 0,
   profilePhotoURL
 ) => {
   const text =
-    'INSERT INTO public.users(uid, "userName", password, "carType", "displayName", "numDrives", "profileURL") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *';
+    'INSERT INTO public.users(uid, "userName",  "carType", "displayName", "numDrives", "profileURL") VALUES ($1,$2,$3,$4,$5,$6) RETURNING *';
   const values = [
     uid,
     userName,
-    password,
     carType,
     displayName,
     numDrives,
