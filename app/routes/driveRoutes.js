@@ -6,7 +6,13 @@ const {
   updateDrive,
 } = require("../middleware/pgDriveOperators");
 
-// * Drives
+const { writeGeo } = require("../middleware/mongoConnection");
+const {
+  addDriveMember,
+  removeDriveMember,
+} = require("../middleware/pgDriveMemberOperators");
+
+// * GroupDrives
 router.get("/drives", async (req, res) => {
   const result = await readDrives();
   console.log(result);
@@ -18,13 +24,16 @@ router.get("/drives", async (req, res) => {
 });
 
 router.put("/createDrive", async (req, res) => {
-  const { orginizerUID, geoMongoId, dateOccuring } = req.query;
+  const { orginizerUID, dateOccuring, geoJSONData } = req.query;
 
   const createdAt = new Date().getTime();
 
+  const data = await writeGeo(geoJSONData);
+  const geoId = data.id;
+
   const result = await createDrive(
     orginizerUID,
-    geoMongoId,
+    geoId,
     dateOccuring,
     createdAt
   );
@@ -77,19 +86,25 @@ router.get("/driveMem", async (req, res) => {
 });
 
 router.put("/driveMem", async (req, res) => {
-  //   const result = await temp();
-  //   console.log(result);
-  //   if (result) {
-  //     console.log({ result });
-  //   }
+  const { driveId, memberUid } = req.query;
+
+  const result = await addDriveMember(driveId, memberUid);
+  if (result) {
+    res.json(result);
+  } else {
+    res.json({ err: true, res });
+  }
 });
 
 router.delete("/driveMem", async (req, res) => {
-  //   const result = await temp();
-  //   console.log(result);
-  //   if (result) {
-  //     console.log({ result });
-  //   }
+  const { driveId, memberUid } = req.query;
+
+  const result = await removeDriveMember(driveId, memberUid);
+  if (result) {
+    res.json(result);
+  } else {
+    res.json({ err: true, res });
+  }
 });
 
 module.exports = router;

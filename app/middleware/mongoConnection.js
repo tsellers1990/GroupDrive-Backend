@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const options = {
-  user: "root",
-  pass: "example",
+  user: process.env.MONGO_USER,
+  pass: process.env.MONGO_PASS,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
 mongoose
-  .connect(`mongodb://mongo_db:27017/local?authSource=admin`, options)
+  .connect(process.env.MONGO_CONNECTION_STRING, options)
   .then(() => {
     console.log("mongo connection is successfull");
   })
@@ -21,17 +21,24 @@ mongoose
 const userLocationSchema = new mongoose.Schema({
   _id: String,
   userName: String,
-  coordinate: String,
   isOnline: {
     type: Boolean,
     default: false,
+  },
+  coordinate: {
+    accuracy: Number,
+    altitude: Number,
+    altitudeAccuracy: Number,
+    heading: Number,
+    latitude: Number,
+    longitude: Number,
+    speed: Number,
   },
 });
 
 const LiveLocation = new mongoose.model("liveLocation", userLocationSchema);
 
 const writeLocation = async (uid, userName, coordinate, isOnline) => {
-  console.log("in write");
   let geo = {
     _id: uid,
     userName: userName,
@@ -45,8 +52,7 @@ const writeLocation = async (uid, userName, coordinate, isOnline) => {
 };
 
 const readLocation = async () => {
-  console.log("in read");
-  return LiveLocation.find({});
+  return LiveLocation.find({isOnline: true});
 };
 
 const readOneLocation = async (uid) => {
@@ -57,23 +63,23 @@ const readOneLocation = async (uid) => {
 // MONGO GEOROUTES STARTS HERE //
 
 const geoSchema = new mongoose.Schema({
-  _id: String,
   geoJSONData: String,
 });
 
 const GeoRoute = new mongoose.model("geoRoute", geoSchema);
 
-const writeGeo = async (postGresID, coordinates) => {
+const writeGeo = async (coordinates) => {
   console.log("in write");
   let geo = {
-    _id: postGresID,
     geoJSONData: coordinates,
   };
 
-  return GeoRoute.findOneAndUpdate({ _id: postGresID }, geo, {
-    upsert: true,
-  }).exec();
+  const newDoc = new GeoRoute(geo);
+
+  return newDoc.save();
 };
+
+//TODO: const updateGeo = () => {}
 
 const readGeo = async () => {
   console.log("in read");

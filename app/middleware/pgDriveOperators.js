@@ -17,7 +17,9 @@ const createDrive = async (
 ) => {
   const driveId = Math.ceil(Math.random() * 1000000000);
 
-  const text = `INSERT INTO public.drives("driveId", "orginizerUID", "geoMongoId", "dateOccuring", "createdAt") VALUES ($1,$2,$3,$4, $5) RETURNING *`;
+  console.log({ driveId, orginizerUID, geoMongoId, dateOccuring, createdAt });
+
+  const text = `INSERT INTO public.drives("driveId", "orginizerUID", "geoMongoId", "dateOccuring", "createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING *`;
   const values = [driveId, orginizerUID, geoMongoId, dateOccuring, createdAt];
 
   const response = await client
@@ -103,4 +105,5 @@ const deleteDrive = async (driveId) => {
     // TODO: add err handling, frfr this time though
   }
 };
+
 module.exports = { createDrive, readDrives, deleteDrive, updateDrive };

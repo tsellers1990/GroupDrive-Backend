@@ -1,5 +1,6 @@
 const { client } = require("../middleware/postgresClient");
 
+
 /*
 @name: createUser
 @params: uid, userName, password, carType, displayName, carType, displayName, friends, numDrives, profilePhotoURL
@@ -9,18 +10,16 @@ const { client } = require("../middleware/postgresClient");
 const createUser = async (
   uid,
   userName,
-  password,
   carType,
   displayName,
-  numDrives,
+  numDrives = 0,
   profilePhotoURL
 ) => {
   const text =
-    'INSERT INTO public.users(uid, "userName", password, "carType", "displayName", "numDrives", "profileURL") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *';
+    'INSERT INTO public.users(uid, "userName",  "carType", "displayName", "numDrives", "profileURL") VALUES ($1,$2,$3,$4,$5,$6) RETURNING *';
   const values = [
     uid,
     userName,
-    password,
     carType,
     displayName,
     numDrives,
@@ -50,7 +49,7 @@ const readUser = async (uid, userName, isPass) => {
   let text;
   let values;
   //handles the lookup of a user when UID is not known
-  console.log({ isPass });
+  console.log({ uid, userName, isPass });
   if (!userName) {
     text =
       isPass === true

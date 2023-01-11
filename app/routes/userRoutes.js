@@ -15,11 +15,11 @@ router.get("/getUser", async (req, res) => {
     if (response) {
       res.json(response);
     } else {
-      res.send(500);
+      res.sendStatus(500);
     }
   } catch (e) {
-    console.log("get user caught something", e);
-    res.send(500);
+    console.log("caught something, getuser", e);
+    res.sendStatus(500);
   }
 });
 
@@ -27,7 +27,6 @@ router.post("/createUser", async (req, res) => {
   const {
     uid,
     userName,
-    password,
     carType,
     displayName,
     numDrives,
@@ -38,7 +37,6 @@ router.post("/createUser", async (req, res) => {
     let response = await userOperators.createUser(
       uid,
       userName,
-      password,
       carType,
       displayName,
       numDrives,
@@ -46,12 +44,13 @@ router.post("/createUser", async (req, res) => {
     );
 
     if (response) {
-      res.send(200);
+      res.sendStatus(200);
     } else {
-      res.send(500);
+      res.sendStatus(500);
     }
   } catch (e) {
-    console.log("create user caught something", e);
+    console.log({e});
+    res.sendStatus(500)
   }
 });
 
