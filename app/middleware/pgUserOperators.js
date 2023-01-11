@@ -1,4 +1,4 @@
-const client = require("../middleware/postgresClient");
+const { client } = require("../middleware/postgresClient");
 
 /*
 @name: createUser
@@ -130,17 +130,16 @@ const deleteUser = async (uid) => {
       .query(text, values)
       .then((res) => {
         console.log(res.rows[0]);
-        return true
+        return true;
       })
       .catch((e) => {
-        console.error(e.stack)
-        return false
+        console.error(e.stack);
+        return false;
       });
 
-      return res
-  
+    return res;
   } catch (e) {
-    console.log("deleteUser err")
+    console.log("deleteUser err");
   }
 };
 

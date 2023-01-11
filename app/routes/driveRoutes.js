@@ -40,7 +40,6 @@ router.delete("/delete", async (req, res) => {
   const { driveId } = req.query;
 
   const result = await deleteDrive(driveId);
-  console.log("js , 42, bitch", {result, driveId});
   if (!result.err) {
     res.send(result);
   } else {

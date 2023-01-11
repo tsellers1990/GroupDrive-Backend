@@ -15,9 +15,9 @@ exports.shorthands = undefined;
 exports.up = pgm => {pgm.createTable('users', {
     uid: {
         allowNull: false,
-        autoIncrement: true,
+        // autoIncrement: true,
         primaryKey: true,
-        type: 'integer',
+        type: 'varchar(200)',
     },
     userName: { type: 'varchar(500)',
         notNull: true,
