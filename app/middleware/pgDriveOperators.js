@@ -1,4 +1,4 @@
-const { client } = require("../middleware/postgresClient");
+const client = require("../middleware/postgresClient");
 /*
 This is where the operators for creating, updating and canceling drives will be the functions to be implemented are outlined
 Create - This will create a drive, it will take in the orginizerUID, geoJSON ID in mongo, date its occuring, driver limits, and if its a reoccuring meet, topicID of GroupChat
@@ -13,14 +13,24 @@ const createDrive = async (
   orginizerUID,
   geoMongoId,
   dateOccuring,
-  createdAt
+  driveTitle,
+  destination,
+  date,
+  time
 ) => {
   const driveId = Math.ceil(Math.random() * 1000000000);
 
-  console.log({ driveId, orginizerUID, geoMongoId, dateOccuring, createdAt });
-
-  const text = `INSERT INTO public.drives("driveId", "orginizerUID", "geoMongoId", "dateOccuring", "createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING *`;
-  const values = [driveId, orginizerUID, geoMongoId, dateOccuring, createdAt];
+  const text = `INSERT INTO public.drives("driveId", "orginizerUID", "geoMongoId", "dateOccuring", "driveTitle", "destination", "date", "time") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
+  const values = [
+    driveId,
+    orginizerUID,
+    geoMongoId,
+    dateOccuring,
+    driveTitle,
+    destination,
+    date,
+    time,
+  ];
 
   const response = await client
     .query(text, values)
