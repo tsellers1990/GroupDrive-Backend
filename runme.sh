@@ -1,0 +1,1 @@
+sudo docker volume prune && sudo docker-compose up --build -d 
