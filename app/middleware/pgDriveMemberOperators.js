@@ -1,4 +1,4 @@
-const { client } = require("../middleware/postgresClient");
+const client = require("../middleware/postgresClient");
 /*
 This is where associating users to drives will take place, drives will not be stored here, it will operate similarly to the friends table
 Add - will take two UIDs, the first being the driveUID and the second being the userUID and create an entry subscribing the user to the drive
@@ -6,8 +6,10 @@ Interested - will take two UIDs, the first being the driveUID and the second bei
 Remove - will take two UIDs, the first being the driveUID and the second being the userUID, this will remove the entry for the user being in/interested for the drive
 */
 
-const addDriveMember = async (driveId, memberUid) => {
-  const text = `UPDATE public.drives SET "driveMembers" = array_append("driveMembers",$2) WHERE "driveId" = $1 RETURNING *`;
+const addDriveMember = async (driveId, memberUid, isEvent = false) => {
+  const text = `UPDATE public.${
+    isEvent ? "events" : "drives"
+  } SET "driveMembers" = array_append("driveMembers",$2) WHERE "driveId" = $1 RETURNING *`;
   const values = [driveId, memberUid];
 
   const response = await client
@@ -28,8 +30,10 @@ const addDriveMember = async (driveId, memberUid) => {
   }
 };
 
-const removeDriveMember = async (driveId, memberUid) => {
-  const text = `UPDATE public.drives SET "driveMembers" = array_remove("driveMembers",$2) WHERE "driveId" = $1 RETURNING *`;
+const removeDriveMember = async (driveId, memberUid, isEvent = false) => {
+  const text = `UPDATE public.${
+    isEvent ? "events" : "drives"
+  } SET "driveMembers" = array_remove("driveMembers",$2) WHERE "driveId" = $1 RETURNING *`;
   const values = [driveId, memberUid];
 
   const response = await client
