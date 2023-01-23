@@ -108,7 +108,6 @@ const deleteEvent = async (driveId) => {
       });
 
     return res;
-    // 939200202
   } catch (e) {
     console.log("deleteEvent err, add err handling frfr");
     // TODO: add err handling, frfr this time though
