@@ -13,7 +13,7 @@ const {
 } = require("../middleware/pgDriveMemberOperators");
 
 // * GroupDrives
-router.get("/drives", async (req, res) => {
+router.get("/drives", firebaseMiddle.decodeToken, async (req, res) => {
   const result = await readDrives();
   console.log(result);
   if (!result.err) {
@@ -23,7 +23,7 @@ router.get("/drives", async (req, res) => {
   }
 });
 
-router.put("/createDrive", async (req, res) => {
+router.put("/createDrive", firebaseMiddle.decodeToken, async (req, res) => {
   const { orginizerUID, dateOccuring, geoJSONData, driveTitle, date, time, destination } =
     req.query;
 

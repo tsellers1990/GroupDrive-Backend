@@ -2,7 +2,7 @@ const {getFriends, addFriend } = require("../middleware/pgFriendOperators");
 const router = require("express").Router();
 
 // * Friends
-router.get("/friends", async (req, res) => {
+router.get("/friends", firebaseMiddle.decodeToken, async (req, res) => {
   const { uid } = req.query;
   const result = await getFriends(uid);
 
@@ -13,7 +13,7 @@ router.get("/friends", async (req, res) => {
   }
 });
 
-router.put("/add", async (req, res) => {
+router.put("/add", firebaseMiddle.decodeToken, async (req, res) => {
   const { uidA, uidB, relationship = "pending" } = req.query;
     //TODO: Seek high preist Adam's knowledge on duplicated friend requests
   console.log({relationship})

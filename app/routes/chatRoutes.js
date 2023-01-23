@@ -1,8 +1,8 @@
 const router = require("express").Router();
 
 // * Chats
-router.get("/chat", async (req, res) => {});
+router.get("/chat", firebaseMiddle.decodeToken, async (req, res) => {});
 
-router.put("/chat", async (req, res) => {});
+router.put("/chat", firebaseMiddle.decodeToken, async (req, res) => {});
 
 module.exports = router;
