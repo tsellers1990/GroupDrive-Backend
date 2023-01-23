@@ -4,8 +4,9 @@ const {
   readOneLocation,
 } = require("../middleware/mongoConnection");
 const router = require("express").Router();
+const firebaseMiddle = require("../middleware/authMiddleware/index");
 
-router.get("/", async (req, res) => {
+router.get("/", firebaseMiddle.decodeToken, async (req, res) => {
   if (req.body.uid) {
     const data = readOneLocation(req.body.uid);
 
@@ -47,7 +48,7 @@ router.get("/", async (req, res) => {
 });
 
 // ! post route
-router.put("/", async (req, res) => {
+router.put("/", firebaseMiddle.decodeToken,  async (req, res) => {
   // console.log("req.body", req.query);
   const { uid, userName, coordinate, isOnline = true } = req.query;
   // console.log(req.query);

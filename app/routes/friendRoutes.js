@@ -1,5 +1,6 @@
 const {getFriends, addFriend } = require("../middleware/pgFriendOperators");
 const router = require("express").Router();
+const firebaseMiddle = require("../middleware/authMiddleware/index");
 
 // * Friends
 router.get("/friends", firebaseMiddle.decodeToken, async (req, res) => {

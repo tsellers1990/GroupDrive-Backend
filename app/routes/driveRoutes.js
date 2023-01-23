@@ -7,6 +7,8 @@ const {
 } = require("../middleware/pgDriveOperators");
 
 const { writeGeo } = require("../middleware/mongoConnection");
+const firebaseMiddle = require("../middleware/authMiddleware/index");
+
 const {
   addDriveMember,
   removeDriveMember,
@@ -49,7 +51,7 @@ router.put("/createDrive", firebaseMiddle.decodeToken, async (req, res) => {
   }
 });
 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", firebaseMiddle.decodeToken,  async (req, res) => {
   const { driveId } = req.query;
 
   const result = await deleteDrive(driveId);
@@ -60,7 +62,7 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
-router.put("/update", async (req, res) => {
+router.put("/update", firebaseMiddle.decodeToken,  async (req, res) => {
   const { driveId, orginizerUID, geoMongoId, dateOccuring } = req.query;
 
   const createdAt = new Date().getTime();

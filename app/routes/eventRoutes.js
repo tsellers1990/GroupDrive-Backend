@@ -11,6 +11,8 @@ const {
   addDriveMember,
   removeDriveMember,
 } = require("../middleware/pgDriveMemberOperators");
+const firebaseMiddle = require("../middleware/authMiddleware/index");
+
 
 // * GroupDrives
 router.get("/events", async (req, res) => {
@@ -23,7 +25,7 @@ router.get("/events", async (req, res) => {
   }
 });
 
-router.put("/createEvent", async (req, res) => {
+router.put("/createEvent", firebaseMiddle.decodeToken,  async (req, res) => {
   const { orginizerUID, dateOccuring, geoJSONData, driveTitle, date, time, destination } =
     req.query;
 
@@ -49,7 +51,7 @@ router.put("/createEvent", async (req, res) => {
   }
 });
 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", firebaseMiddle.decodeToken,  async (req, res) => {
   const { driveId } = req.query;
 
   const result = await deleteEvent(driveId);
@@ -60,7 +62,7 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
-router.put("/update", async (req, res) => {
+router.put("/update", firebaseMiddle.decodeToken,  async (req, res) => {
   const { driveId, orginizerUID, geoMongoId, dateOccuring } = req.query;
 
   const createdAt = new Date().getTime();
@@ -81,7 +83,7 @@ router.put("/update", async (req, res) => {
 });
 
 // * Drive Members
-router.get("/driveMem", async (req, res) => {
+router.get("/driveMem", firebaseMiddle.decodeToken,  async (req, res) => {
   //   const result = await temp();
   //   console.log(result);
   //   if (result) {
@@ -89,7 +91,7 @@ router.get("/driveMem", async (req, res) => {
   //   }
 });
 
-router.put("/driveMem", async (req, res) => {
+router.put("/driveMem", firebaseMiddle.decodeToken,  async (req, res) => {
   const { driveId, memberUid } = req.query;
 
   const result = await addDriveMember(driveId, memberUid, true);
@@ -100,7 +102,7 @@ router.put("/driveMem", async (req, res) => {
   }
 });
 
-router.delete("/driveMem", async (req, res) => {
+router.delete("/driveMem", firebaseMiddle.decodeToken,  async (req, res) => {
   const { driveId, memberUid } = req.query;
 
   const result = await removeDriveMember(driveId, memberUid, true);

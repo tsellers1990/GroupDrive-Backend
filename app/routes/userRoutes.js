@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const userOperators = require("../middleware/pgUserOperators");
+const firebaseMiddle = require("../middleware/authMiddleware/index");
 
 // * Users
-router.get("/getUser", async (req, res) => {
+router.get("/getUser", firebaseMiddle.decodeToken,  async (req, res) => {
   const { uid, userName } = req.query;
   const isPass = req?.query?.isPass || false;
 
@@ -23,7 +24,7 @@ router.get("/getUser", async (req, res) => {
   }
 });
 
-router.post("/createUser", async (req, res) => {
+router.post("/createUser", firebaseMiddle.decodeToken,  async (req, res) => {
   const {
     uid,
     userName,
@@ -54,7 +55,7 @@ router.post("/createUser", async (req, res) => {
   }
 });
 
-router.put("/updateUser", async (req, res) => {
+router.put("/updateUser", firebaseMiddle.decodeToken,  async (req, res) => {
   //   ! incomplete
   const {
     uid,
@@ -87,7 +88,7 @@ router.put("/updateUser", async (req, res) => {
   }
 });
 
-router.delete("/deleteUser", async (req, res) => {
+router.delete("/deleteUser", firebaseMiddle.decodeToken,  async (req, res) => {
   //   ! incomplete
   const { uid, userName, password } = req.query;
 

@@ -15,7 +15,7 @@ class AuthMiddleware {
             }
         } catch (err) {
             // console.log("caught error!", err);   
-            res.status(500).send("firebase auth error!");
+            res.json(err)
         }
     }
 }

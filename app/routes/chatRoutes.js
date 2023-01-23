@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const firebaseMiddle = require("../middleware/authMiddleware/index");
 
 // * Chats
 router.get("/chat", firebaseMiddle.decodeToken, async (req, res) => {});
