@@ -1,4 +1,4 @@
-const client = require("../middleware/postgresClient");
+const client = require("./postgresClient");
 /*
 This is where the operators for creating, updating and canceling drives will be the functions to be implemented are outlined
 Create - This will create a drive, it will take in the orginizerUID, geoJSON ID in mongo, date its occuring, driver limits, and if its a reoccuring meet, topicID of GroupChat
@@ -9,7 +9,7 @@ Happened - this will update the drive to it being past tense
 Of note, none of the drives will be removed to retain historical records of drives that have happened
  */
 
-const createDrive = async (
+const createEvent = async (
   orginizerUID,
   geoMongoId,
   dateOccuring,
@@ -20,7 +20,7 @@ const createDrive = async (
 ) => {
   const driveId = Math.ceil(Math.random() * 1000000000);
 
-  const text = `INSERT INTO public.drives("driveId", "orginizerUID", "geoMongoId", "dateOccuring", "driveTitle", "destination", "date", "time") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
+  const text = `INSERT INTO public.events("driveId", "orginizerUID", "geoMongoId", "dateOccuring", "driveTitle", "destination", "date", "time") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
   const values = [
     driveId,
     orginizerUID,
@@ -50,8 +50,8 @@ const createDrive = async (
   }
 };
 
-const readDrives = async () => {
-  const text = `SELECT * FROM public.drives`;
+const readEvent = async () => {
+  const text = `SELECT * FROM public.events`;
   //  WHERE "driveId" LIKE $1
 
   //  const values = [driveId];
@@ -61,7 +61,6 @@ const readDrives = async () => {
   const response = await client
     .query(text)
     .then((res) => {
-      console.log("resRows", res.rows[0]);
       return res.rows;
     })
     .catch((e) => {
@@ -72,14 +71,14 @@ const readDrives = async () => {
   return response;
 };
 
-const updateDrive = (
+const updateEvent = (
   driveId,
   orginizerUID,
   geoMongoId,
   dateOccuring,
   createdAt
 ) => {
-  const text = `UPDATE public.drives SET "orginizerUID" = $2, "geoMongoId" = $3, "dateOccuring" = $4, "createdAt" = $5 WHERE "driveId" = $1 RETURNING *`;
+  const text = `UPDATE public.events SET "orginizerUID" = $2, "geoMongoId" = $3, "dateOccuring" = $4, "createdAt" = $5 WHERE "driveId" = $1 RETURNING *`;
   const values = [driveId, orginizerUID, geoMongoId, dateOccuring, createdAt];
   // TODO: should we update createdAt?
   // TODO: If a value is undefined don't replace it with null
@@ -91,9 +90,9 @@ const updateDrive = (
     .catch((e) => console.error(e.stack));
 };
 
-const deleteDrive = async (driveId) => {
+const deleteEvent = async (driveId) => {
   //removes a user completely from the table, this function has no verification, and once its called, the user row is removed, that verification should be handled further down stream
-  const text = `DELETE FROM public.drives where "driveId" = $1 returning *;`;
+  const text = `DELETE FROM public.events where "driveId" = $1 returning *;`;
   const values = [driveId];
 
   try {
@@ -109,11 +108,10 @@ const deleteDrive = async (driveId) => {
       });
 
     return res;
-    // 939200202
   } catch (e) {
-    console.log("deleteDrive err, add err handling frfr");
+    console.log("deleteEvent err, add err handling frfr");
     // TODO: add err handling, frfr this time though
   }
 };
 
-module.exports = { createDrive, readDrives, deleteDrive, updateDrive };
+module.exports = { createEvent, readEvent, deleteEvent, updateEvent };

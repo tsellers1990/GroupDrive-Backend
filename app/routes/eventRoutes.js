@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const {
-  createDrive,
-  readDrives,
-  deleteDrive,
-  updateDrive,
-} = require("../middleware/pgDriveOperators");
+  createEvent,
+  readEvent,
+  deleteEvent,
+  updateEvent,
+} = require("../middleware/pgEventOperators");
 
 const { writeGeo } = require("../middleware/mongoConnection");
 const {
@@ -13,8 +13,8 @@ const {
 } = require("../middleware/pgDriveMemberOperators");
 
 // * GroupDrives
-router.get("/drives", async (req, res) => {
-  const result = await readDrives();
+router.get("/events", async (req, res) => {
+  const result = await readEvent();
   console.log(result);
   if (!result.err) {
     res.send(result);
@@ -23,7 +23,7 @@ router.get("/drives", async (req, res) => {
   }
 });
 
-router.put("/createDrive", async (req, res) => {
+router.put("/createEvent", async (req, res) => {
   const { orginizerUID, dateOccuring, geoJSONData, driveTitle, date, time, destination } =
     req.query;
 
@@ -32,7 +32,7 @@ router.put("/createDrive", async (req, res) => {
   const data = await writeGeo(geoJSONData);
   const geoId = data.id;
 
-  const result = await createDrive(
+  const result = await createEvent(
     orginizerUID,
     geoId,
     dateOccuring,
@@ -52,7 +52,7 @@ router.put("/createDrive", async (req, res) => {
 router.delete("/delete", async (req, res) => {
   const { driveId } = req.query;
 
-  const result = await deleteDrive(driveId);
+  const result = await deleteEvent(driveId);
   if (!result.err) {
     res.send(result);
   } else {
@@ -65,7 +65,7 @@ router.put("/update", async (req, res) => {
 
   const createdAt = new Date().getTime();
 
-  const result = await updateDrive(
+  const result = await updateEvent(
     driveId,
     orginizerUID,
     geoMongoId,
@@ -92,7 +92,7 @@ router.get("/driveMem", async (req, res) => {
 router.put("/driveMem", async (req, res) => {
   const { driveId, memberUid } = req.query;
 
-  const result = await addDriveMember(driveId, memberUid);
+  const result = await addDriveMember(driveId, memberUid, true);
   if (result) {
     res.json(result);
   } else {
@@ -103,7 +103,7 @@ router.put("/driveMem", async (req, res) => {
 router.delete("/driveMem", async (req, res) => {
   const { driveId, memberUid } = req.query;
 
-  const result = await removeDriveMember(driveId, memberUid);
+  const result = await removeDriveMember(driveId, memberUid, true);
   if (result) {
     res.json(result);
   } else {
