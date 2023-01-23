@@ -9,13 +9,14 @@ class AuthMiddleware {
             if(decodeValue){
                 // console.log("decode complete");
                 next();
-            } else {
-                console.log("jwt failed");
-                res.sendStatus(401);
             }
         } catch (err) {
-            // console.log("caught error!", err);   
-            res.status(500).send("firebase auth error!");
+            console.log("caught error!", err);
+            if(err.codePrefix === 'auth'){
+                res.sendStatus(401);
+            } else {
+                res.status(500).send("firebase auth error!");
+            }
         }
     }
 }
