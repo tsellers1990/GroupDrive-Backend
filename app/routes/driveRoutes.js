@@ -10,6 +10,7 @@ const { writeGeo } = require("../middleware/mongoConnection");
 const {
   addDriveMember,
   removeDriveMember,
+  getDriveMembers,
 } = require("../middleware/pgDriveMemberOperators");
 
 // * GroupDrives
@@ -24,8 +25,15 @@ router.get("/drives", async (req, res) => {
 });
 
 router.put("/createDrive", async (req, res) => {
-  const { orginizerUID, dateOccuring, geoJSONData, driveTitle, date, time, destination } =
-    req.query;
+  const {
+    orginizerUID,
+    dateOccuring,
+    geoJSONData,
+    driveTitle,
+    date,
+    time,
+    destination,
+  } = req.query;
 
   const createdAt = new Date().getTime();
 
@@ -39,7 +47,7 @@ router.put("/createDrive", async (req, res) => {
     driveTitle,
     destination,
     date,
-    time, 
+    time
   );
 
   if (!result?.err) {
@@ -82,11 +90,9 @@ router.put("/update", async (req, res) => {
 
 // * Drive Members
 router.get("/driveMem", async (req, res) => {
-  //   const result = await temp();
-  //   console.log(result);
-  //   if (result) {
-  //     console.log({ result });
-  //   }
+  const { driveId } = req.query;
+  const result = await getDriveMembers(driveId);
+  res.json(result)
 });
 
 router.put("/driveMem", async (req, res) => {
