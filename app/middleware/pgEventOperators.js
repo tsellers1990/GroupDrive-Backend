@@ -50,16 +50,16 @@ const createEvent = async (
   }
 };
 
-const readEvent = async () => {
-  const text = `SELECT * FROM public.events`;
-  //  WHERE "driveId" LIKE $1
+const readEvent = async (eventId = undefined) => {
+  console.log("eventId", eventId);
+  const text = eventId
+    ? `SELECT * FROM public.events WHERE "driveId" = $1`
+    : `SELECT * FROM public.events`;
 
-  //  const values = [driveId];
-
-  // console.log({ text, values });
+  const values = [eventId];
 
   const response = await client
-    .query(text)
+    .query(text, eventId && values)
     .then((res) => {
       return res.rows;
     })
@@ -86,7 +86,7 @@ const updateEvent = (
     .query(text, values)
     .then((res) => {
       console.log(res.rows[0]);
-      return res.rows
+      return res.rows;
     })
     .catch((e) => console.error(e.stack));
 };

@@ -16,7 +16,7 @@ const firebaseMiddle = require("../middleware/authMiddleware/index");
 
 // * GroupDrives
 router.get("/events", async (req, res) => {
-  const result = await readEvent();
+  const result = await readEvent(req?.query?.eventId);
   console.log(result);
   if (!result.err) {
     res.send(result);

@@ -19,7 +19,7 @@ router.get("/friends", firebaseMiddle.decodeToken, async (req, res) => {
 router.put("/add", firebaseMiddle.decodeToken, async (req, res) => {
   const { uidA, uidB, relationship = "pending" } = req.query;
   //TODO: Seek high preist Adam's knowledge on duplicated friend requests
-  console.log({ uidA, uidB, relationship });
+  console.log("uidA", uidA, "uidB", uidB, "relationship", relationship);
   try {
     const result = await addFriend(uidA, uidB, relationship);
     

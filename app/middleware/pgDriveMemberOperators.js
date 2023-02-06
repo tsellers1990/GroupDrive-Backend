@@ -23,7 +23,7 @@ const getDriveMembers = async (driveId, isEvent = false) => {
       return { err: e };
     });
 
-  if (!response.err) {
+  if (!response?.err) {
     return response;
   } else {
     return { response };
