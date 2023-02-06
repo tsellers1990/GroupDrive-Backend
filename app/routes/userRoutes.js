@@ -24,10 +24,8 @@ router.get("/getUser", async (req, res) => {
 });
 
 router.get("/getAllUsers", async (req, res) => {
-  const { userName } = req.query;
-
   try {
-    let response = await userOperators.readAllUsers(userName);
+    let response = await userOperators.readAllUsers();
     if (response) {
       res.json(response);
     } else {

@@ -142,14 +142,11 @@ const deleteUser = async (uid) => {
   }
 };
 
-const readAllUsers = async (userName) => {
+const readAllUsers = async () => {
   let text;
   let values;
 
-  if (userName) {
-    text = `SELECT uid, "userName", "carType", "displayName", "numDrives", "profileURL" FROM public.users`;
-    // values = [userName];
-  }
+  text = `SELECT uid, "userName", "carType", "displayName", "numDrives", "profileURL" FROM public.users`;
 
   const response = await client.query(text, values);
 
