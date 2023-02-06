@@ -5,11 +5,11 @@ exports.shorthands = undefined;
 exports.up = pgm => {pgm.createTable('friends', {
     uidA: {
         allowNull: false,
-        type: 'integer',
+        type: 'varchar(100)',
     },
     uidB: {
         allowNull: false,
-        type: 'integer'
+        type: 'varchar(100)'
     },
     relationship:{
         allowNull: false,

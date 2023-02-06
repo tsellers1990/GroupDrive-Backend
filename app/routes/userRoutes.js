@@ -24,15 +24,26 @@ router.get("/getUser", firebaseMiddle.decodeToken,  async (req, res) => {
   }
 });
 
+
+router.get("/getAllUsers", async (req, res) => {
+  const { userName } = req.query;
+
+  try {
+    let response = await userOperators.readAllUsers(userName);
+    if (response) {
+      res.json(response);
+    } else {
+      res.sendStatus(500);
+    }
+  } catch (e) {
+    console.log("caught something, getuser", e);
+    res.sendStatus(500);
+  }
+});
+
 router.post("/createUser", firebaseMiddle.decodeToken,  async (req, res) => {
-  const {
-    uid,
-    userName,
-    carType,
-    displayName,
-    numDrives,
-    profilePhotoURL,
-  } = req.query;
+  const { uid, userName, carType, displayName, numDrives, profilePhotoURL } =
+    req.query;
 
   try {
     let response = await userOperators.createUser(
@@ -50,8 +61,8 @@ router.post("/createUser", firebaseMiddle.decodeToken,  async (req, res) => {
       res.sendStatus(500);
     }
   } catch (e) {
-    console.log({e});
-    res.sendStatus(500)
+    console.log({ e });
+    res.sendStatus(500);
   }
 });
 

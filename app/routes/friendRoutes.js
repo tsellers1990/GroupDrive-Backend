@@ -1,29 +1,33 @@
-const {getFriends, addFriend } = require("../middleware/pgFriendOperators");
+const { getFriends, addFriend } = require("../middleware/pgFriendOperators");
 const router = require("express").Router();
 const firebaseMiddle = require("../middleware/authMiddleware/index");
 
 // * Friends
 router.get("/friends", firebaseMiddle.decodeToken, async (req, res) => {
-  const { uid } = req.query;
-  const result = await getFriends(uid);
+  try {
+    const result = await getFriends(req?.query?.uid);
 
-  if (!result?.err) {
-    res.send(result);
-  } else {
-    res.status(500).send(result);
+    if (!result?.err) {
+      res.send(result);
+    }
+  } catch (e) {
+    console.log({ e });
+    res.status(500).send(e);
   }
 });
 
 router.put("/add", firebaseMiddle.decodeToken, async (req, res) => {
   const { uidA, uidB, relationship = "pending" } = req.query;
-    //TODO: Seek high preist Adam's knowledge on duplicated friend requests
-  console.log({relationship})
-  const result = await addFriend(uidA, uidB, relationship);
-
-  if (!result?.err) {
-    res.send(result);
-  } else {
-    res.status(500).send(result);
+  //TODO: Seek high preist Adam's knowledge on duplicated friend requests
+  console.log({ uidA, uidB, relationship });
+  try {
+    const result = await addFriend(uidA, uidB, relationship);
+    
+    if (!result?.err) {
+      res.send(result);
+    }
+  } catch (e) {
+    res.status(500).send(e);
   }
 });
 

@@ -12,6 +12,7 @@ const firebaseMiddle = require("../middleware/authMiddleware/index");
 const {
   addDriveMember,
   removeDriveMember,
+  getDriveMembers,
 } = require("../middleware/pgDriveMemberOperators");
 
 // * GroupDrives
@@ -25,9 +26,16 @@ router.get("/drives", firebaseMiddle.decodeToken, async (req, res) => {
   }
 });
 
-router.put("/createDrive", firebaseMiddle.decodeToken, async (req, res) => {
-  const { orginizerUID, dateOccuring, geoJSONData, driveTitle, date, time, destination } =
-    req.query;
+router.put("/createDrive", firebaseMiddle.decodeToken, async (req, res) => {  
+  const {
+    orginizerUID,
+    dateOccuring,
+    geoJSONData,
+    driveTitle,
+    date,
+    time,
+    destination,
+  } = req.query;
 
   const createdAt = new Date().getTime();
 
@@ -41,7 +49,7 @@ router.put("/createDrive", firebaseMiddle.decodeToken, async (req, res) => {
     driveTitle,
     destination,
     date,
-    time, 
+    time
   );
 
   if (!result?.err) {
@@ -84,11 +92,9 @@ router.put("/update", firebaseMiddle.decodeToken,  async (req, res) => {
 
 // * Drive Members
 router.get("/driveMem", async (req, res) => {
-  //   const result = await temp();
-  //   console.log(result);
-  //   if (result) {
-  //     console.log({ result });
-  //   }
+  const { driveId } = req.query;
+  const result = await getDriveMembers(driveId);
+  res.json(result)
 });
 
 router.put("/driveMem", async (req, res) => {

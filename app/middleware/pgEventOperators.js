@@ -86,6 +86,7 @@ const updateEvent = (
     .query(text, values)
     .then((res) => {
       console.log(res.rows[0]);
+      return res.rows
     })
     .catch((e) => console.error(e.stack));
 };

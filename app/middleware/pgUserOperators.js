@@ -1,7 +1,6 @@
 // const client = require("../middleware/postgresClient");
 const client = require("../middleware/postgresClient");
 
-
 /*
 @name: createUser
 @params: uid, userName, password, carType, displayName, carType, displayName, friends, numDrives, profilePhotoURL
@@ -130,18 +129,31 @@ const deleteUser = async (uid) => {
       .query(text, values)
       .then((res) => {
         console.log(res.rows[0]);
-        return true
+        return true;
       })
       .catch((e) => {
-        console.error(e.stack)
-        return false
+        console.error(e.stack);
+        return false;
       });
 
-      return res
-  
+    return res;
   } catch (e) {
-    console.log("deleteUser err")
+    console.log("deleteUser err");
   }
 };
 
-module.exports = { createUser, readUser, updateUser, deleteUser };
+const readAllUsers = async (userName) => {
+  let text;
+  let values;
+
+  if (userName) {
+    text = `SELECT uid, "userName", "carType", "displayName", "numDrives", "profileURL" FROM public.users`;
+    // values = [userName];
+  }
+
+  const response = await client.query(text, values);
+
+  return response.rows;
+};
+
+module.exports = { createUser, readUser, updateUser, deleteUser, readAllUsers };
