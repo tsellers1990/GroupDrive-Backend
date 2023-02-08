@@ -8,12 +8,12 @@ exports.up = (pgm) => {
       allowNull: true,
       autoIncrement: true,
       primaryKey: true,
-      type: "integer",
+      type: "varchar(100)",
       defaultValue: 0,
     },
-    orginizerUID: {
+    organizerUID: {
       allowNull: false,
-      type: "integer",
+      type: "varchar(50)",
     },
     geoMongoId: {
       allowNull: false,
@@ -49,15 +49,7 @@ exports.up = (pgm) => {
     destination: {
       allowNull: false,
       type: "varchar(255)",
-    },
-    date: {
-      allowNull: false,
-      type: "varchar(255)",
-    },
-    time: {
-      allowNull: false,
-      type: "varchar(255)",
-    },
+    }
   });
 };
 

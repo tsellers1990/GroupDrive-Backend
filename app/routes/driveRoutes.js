@@ -26,12 +26,9 @@ router.get("/drives", async (req, res) => {
 
 router.put("/createDrive", async (req, res) => {
   const {
-    orginizerUID,
-    dateOccuring,
+    organizerUID,
     geoJSONData,
     driveTitle,
-    date,
-    time,
     destination,
   } = req.query;
 
@@ -41,13 +38,11 @@ router.put("/createDrive", async (req, res) => {
   const geoId = data.id;
 
   const result = await createDrive(
-    orginizerUID,
+    organizerUID,
     geoId,
-    dateOccuring,
+    createdAt,
     driveTitle,
     destination,
-    date,
-    time
   );
 
   if (!result?.err) {
