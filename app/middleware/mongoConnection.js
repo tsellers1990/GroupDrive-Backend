@@ -69,9 +69,9 @@ const geoSchema = new mongoose.Schema({
 const GeoRoute = new mongoose.model("geoRoute", geoSchema);
 
 const writeGeo = async (coordinates) => {
-  console.log("in write");
+  console.log("in write", coordinates, typeof coordinates);
   let geo = {
-    geoJSONData: coordinates,
+    geoJSONData: JSON.stringify(coordinates),
   };
 
   const newDoc = new GeoRoute(geo);

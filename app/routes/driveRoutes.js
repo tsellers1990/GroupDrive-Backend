@@ -28,12 +28,9 @@ router.get("/drives", firebaseMiddle.decodeToken, async (req, res) => {
 
 router.put("/createDrive", firebaseMiddle.decodeToken, async (req, res) => {  
   const {
-    orginizerUID,
-    dateOccuring,
+    organizerUID,
     geoJSONData,
     driveTitle,
-    date,
-    time,
     destination,
   } = req.query;
 
@@ -43,13 +40,11 @@ router.put("/createDrive", firebaseMiddle.decodeToken, async (req, res) => {
   const geoId = data.id;
 
   const result = await createDrive(
-    orginizerUID,
+    organizerUID,
     geoId,
-    dateOccuring,
+    createdAt,
     driveTitle,
     destination,
-    date,
-    time
   );
 
   if (!result?.err) {

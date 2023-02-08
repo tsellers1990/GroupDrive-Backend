@@ -10,26 +10,22 @@ Of note, none of the drives will be removed to retain historical records of driv
  */
 
 const createDrive = async (
-  orginizerUID,
+  organizerUID,
   geoMongoId,
   dateOccuring,
   driveTitle,
   destination,
-  date,
-  time
 ) => {
   const driveId = Math.ceil(Math.random() * 1000000000);
 
-  const text = `INSERT INTO public.drives("driveId", "orginizerUID", "geoMongoId", "dateOccuring", "driveTitle", "destination", "date", "time") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
+  const text = `INSERT INTO public.drives("driveId", "organizerUID", "geoMongoId", "dateOccuring", "driveTitle", "destination") VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`;
   const values = [
     driveId,
-    orginizerUID,
+    organizerUID,
     geoMongoId,
     dateOccuring,
     driveTitle,
     destination,
-    date,
-    time,
   ];
 
   const response = await client
