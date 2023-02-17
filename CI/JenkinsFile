@@ -1,0 +1,53 @@
+#!/usr/bin/groovy
+
+// load pipeline functions
+// Requires pipeline-github-lib plugin to load library from github
+@Library('github.com/lachie83/jenkins-pipeline@master')
+def pipeline = new io.estrado.Pipeline()
+
+podTemplate(label: 'jenkins-pipeline', containers: [
+    containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent:latest', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '500m', resourceLimitCpu: '500m', resourceRequestMemory: '1024Mi', resourceLimitMemory: '1024Mi'),
+    containerTemplate(name: 'docker', image: 'docker:dind', command: 'dockerd', ttyEnabled: true, privileged: true),
+],
+volumes:[
+//     hostPathVolume(mountPath: '/', hostPath: '/var/run/docker.sock'),
+]){
+
+  node ('jenkins-pipeline') {
+        // checkout sources
+    checkout scm
+
+    // set additional git envvars for image tagging
+    pipeline.gitEnvVars()
+
+    // Execute Maven build and tests
+    stage ('Build') {
+
+      container ('docker') {
+        sh "docker run hello-world"
+      }
+
+    }
+    stage('Test'){
+        echo "Who needs tests!"
+
+    }
+    stage('Deploy to Dev'){
+        input "Deploy to Dev?"
+        echo "TODO: Implement this Later"
+    }
+      stage('Deploy to QA'){
+        input "Deploy to QA?"
+        echo "TODO: Implement this Later"
+    }
+   stage('Deploy to Prod') {
+    when {
+        branch 'main'
+    }
+    steps {
+        input "Deploy to Prod"
+        echo 'run this stage - only if the branch name started with feature/'
+    }
+    }
+  }
+}
