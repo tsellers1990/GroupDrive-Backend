@@ -12,7 +12,6 @@ const getDriveMembers = async (driveId, isEvent = false) => {
   } WHERE "driveId" = $1`;
   const values = [driveId];
 
-
   const response = await client
     .query(text, values)
     .then((res) => {

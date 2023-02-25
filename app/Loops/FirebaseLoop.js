@@ -1,4 +1,4 @@
-import * as staticRefs from '../FirebaseCalls/staticRefs'
+import * as staticRefs from "../FirebaseCalls/staticRefs";
 
 let count = 0;
 
@@ -15,6 +15,3 @@ const loopSpeedLimiter = () => {
 };
 
 // loopInitializer();
-
-
-

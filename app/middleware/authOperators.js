@@ -1,23 +1,15 @@
 // ! incomplete
 // * firebase operators
 
-
 /*
 @name: createJWT
 @params: uid, userName, password, carType, displayName, carType, displayName, friends, numDrives, profilePhotoURL
 @desc: Generates a prepared statement to inject values into the correct fields via postgresql
 @return: true if user was successfully created
 */
-const createUser = async (
-  userName,
-  password,
-) => {
-  const query =
-    'firebase call stuff';
-  const values = [
-    userName,
-    password,
-  ];
+const createUser = async (userName, password) => {
+  const query = "firebase call stuff";
+  const values = [userName, password];
   const response = await client
     .query(text, values)
     .then((res) => {
@@ -42,7 +34,7 @@ const readJWT = async (userName, password) => {
   let text;
   let values;
 
-  const query = "firebase stuff here"
+  const query = "firebase stuff here";
 
   const response = await client
     .query(text, values)

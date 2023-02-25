@@ -21,7 +21,7 @@ router.put("/add", async (req, res) => {
   console.log("uidA", uidA, "uidB", uidB, "relationship", relationship);
   try {
     const result = await addFriend(uidA, uidB, relationship);
-    
+
     if (!result?.err) {
       res.send(result);
     }

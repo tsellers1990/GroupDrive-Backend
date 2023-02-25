@@ -34,13 +34,13 @@ exports.up = (pgm) => {
       defaultValue: 0,
     },
     createdAt: {
-      type: 'timestamp',
+      type: "timestamp",
       notNull: true,
-      default: pgm.func('current_timestamp'),
+      default: pgm.func("current_timestamp"),
     },
     driveMembers: {
       type: "text[]",
-    //   default: [],
+      //   default: [],
     },
     driveTitle: {
       allowNull: false,
@@ -49,7 +49,7 @@ exports.up = (pgm) => {
     destination: {
       allowNull: false,
       type: "varchar(255)",
-    }
+    },
   });
 };
 

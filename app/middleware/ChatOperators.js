@@ -1,5 +1,5 @@
-const {client} = require("../middleware/postgresClient")
- /*
+const { client } = require("../middleware/postgresClient");
+/*
  Same concept as the friends table, we will associate topicIDs with userUIDs, there will be flags for group chats and direct messages
  createGC - this function should be called in an iterated form, it check if the gcID exists, if it does not, then it will create a gcID
     using kafka and subsribe the first uid given, as a return it will provide the gcID

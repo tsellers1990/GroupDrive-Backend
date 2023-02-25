@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
         const arr = data
           .filter((userBlock) => {
             if (req.params.requesterUid !== userBlock._id) {
-            return true;
+              return true;
             }
           })
           .map((dave) => {
@@ -51,20 +51,20 @@ router.put("/", async (req, res) => {
   // console.log("req.body", req.query);
   const { uid, userName, coordinate, isOnline = true } = req.query;
   // console.log(req.query);
-  const parseCoords = JSON.parse(coordinate)
-  if(parseCoords?.latitude && parseCoords?.longitude){
+  const parseCoords = JSON.parse(coordinate);
+  if (parseCoords?.latitude && parseCoords?.longitude) {
     const response = await writeLocation(uid, userName, parseCoords, isOnline);
     //? also something to send off
 
     if (response) {
-      res.sendStatus(201)
+      res.sendStatus(201);
     } else {
-      res.sendStatus(500)
+      res.sendStatus(500);
     }
   } else {
     // console.log("invalid coord.lat or long", coordinate["latitude"], coordinate.longitude)
     // console.log(coordinate)
-    res.sendStatus(500)
+    res.sendStatus(500);
   }
 });
 

@@ -2,24 +2,26 @@
 
 exports.shorthands = undefined;
 
-exports.up = pgm => {pgm.createTable('chatTopics', {
+exports.up = (pgm) => {
+  pgm.createTable("chatTopics", {
     Uid: {
-        allowNull: false,
-        type: 'varchar',
+      allowNull: false,
+      type: "varchar",
     },
     mqttUser: {
-        allowNull: false,
-        type: 'varchar',
+      allowNull: false,
+      type: "varchar",
     },
-    mqttPassword:{
-        allowNull: false,
-        type: 'varchar(10)'
+    mqttPassword: {
+      allowNull: false,
+      type: "varchar(10)",
     },
     createdAt: {
-        type: 'timestamp',
-        notNull: true,
-        default: pgm.func('current_timestamp'),
+      type: "timestamp",
+      notNull: true,
+      default: pgm.func("current_timestamp"),
     },
-})};
+  });
+};
 
-exports.down = pgm => {};
+exports.down = (pgm) => {};

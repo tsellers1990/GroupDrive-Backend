@@ -51,7 +51,6 @@ const createEvent = async (
 };
 
 const readEvent = async (eventId = undefined) => {
-  console.log("eventId", eventId);
   const text = eventId
     ? `SELECT * FROM public.events WHERE "driveId" = $1`
     : `SELECT * FROM public.events`;

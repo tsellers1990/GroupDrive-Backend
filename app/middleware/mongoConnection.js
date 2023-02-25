@@ -52,7 +52,7 @@ const writeLocation = async (uid, userName, coordinate, isOnline) => {
 };
 
 const readLocation = async () => {
-  return LiveLocation.find({isOnline: true});
+  return LiveLocation.find({ isOnline: true });
 };
 
 const readOneLocation = async (uid) => {

@@ -14,7 +14,7 @@ const createDrive = async (
   geoMongoId,
   dateOccuring,
   driveTitle,
-  destination,
+  destination
 ) => {
   const driveId = Math.ceil(Math.random() * 1000000000);
 
@@ -48,11 +48,6 @@ const createDrive = async (
 
 const readDrives = async () => {
   const text = `SELECT * FROM public.drives`;
-  //  WHERE "driveId" LIKE $1
-
-  //  const values = [driveId];
-
-  // console.log({ text, values });
 
   const response = await client
     .query(text)

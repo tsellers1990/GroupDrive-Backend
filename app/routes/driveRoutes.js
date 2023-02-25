@@ -16,7 +16,7 @@ const {
 // * GroupDrives
 router.get("/drives", async (req, res) => {
   const result = await readDrives();
-  console.log(result);
+
   if (!result.err) {
     res.send(result);
   } else {
@@ -25,12 +25,7 @@ router.get("/drives", async (req, res) => {
 });
 
 router.put("/createDrive", async (req, res) => {
-  const {
-    organizerUID,
-    geoJSONData,
-    driveTitle,
-    destination,
-  } = req.query;
+  const { organizerUID, geoJSONData, driveTitle, destination } = req.query;
 
   const createdAt = new Date().getTime();
 
@@ -42,7 +37,7 @@ router.put("/createDrive", async (req, res) => {
     geoId,
     createdAt,
     driveTitle,
-    destination,
+    destination
   );
 
   if (!result?.err) {
@@ -87,7 +82,7 @@ router.put("/update", async (req, res) => {
 router.get("/driveMem", async (req, res) => {
   const { driveId } = req.query;
   const result = await getDriveMembers(driveId);
-  res.json(result)
+  res.json(result);
 });
 
 router.put("/driveMem", async (req, res) => {

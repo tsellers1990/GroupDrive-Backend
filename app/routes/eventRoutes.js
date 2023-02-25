@@ -24,8 +24,15 @@ router.get("/events", async (req, res) => {
 });
 
 router.put("/createEvent", async (req, res) => {
-  const { orginizerUID, dateOccuring, geoJSONData, driveTitle, date, time, destination } =
-    req.query;
+  const {
+    orginizerUID,
+    dateOccuring,
+    geoJSONData,
+    driveTitle,
+    date,
+    time,
+    destination,
+  } = req.query;
 
   const createdAt = new Date().getTime();
 
@@ -39,7 +46,7 @@ router.put("/createEvent", async (req, res) => {
     driveTitle,
     destination,
     date,
-    time, 
+    time
   );
 
   if (!result?.err) {

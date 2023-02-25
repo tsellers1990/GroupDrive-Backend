@@ -12,44 +12,44 @@ exports.shorthands = undefined;
 //     "numDrives"   integer default 0,
 //     "profileURL"  varchar
 // );
-exports.up = pgm => {pgm.createTable('users', {
+exports.up = (pgm) => {
+  pgm.createTable("users", {
     uid: {
-        primaryKey: true,
-        type: 'varchar',
+      primaryKey: true,
+      type: "varchar",
     },
-    userName: { type: 'varchar(500)',
-        notNull: true,
-        unique: true,
-    },
+    userName: { type: "varchar(500)", notNull: true, unique: true },
     carType: {
-        type: 'varchar(1000)',
-        notNull: true,
-        defaultValue: 'MayBike',
+      type: "varchar(1000)",
+      notNull: true,
+      defaultValue: "MayBike",
     },
     displayName: {
-        type: 'varchar(50)',
-        notNull: true,
+      type: "varchar(50)",
+      notNull: true,
     },
     numDrives: {
-        type: "integer",
-        notNull: true,
-        defaultValue: 0,
+      type: "integer",
+      notNull: true,
+      defaultValue: 0,
     },
     profileURL: {
-        type: "varchar(255)",
-        notNull: true,
-        defaultValue: "https://res.cloudinary.com/selrich-technology/image/upload/v1653431979/ymztltnx1lgsynhqknw2.png"
-    },
-    lastSignIn:{
-      type: 'timestamp',
+      type: "varchar(255)",
       notNull: true,
-      default: pgm.func('current_timestamp'),
+      defaultValue:
+        "https://res.cloudinary.com/selrich-technology/image/upload/v1653431979/ymztltnx1lgsynhqknw2.png",
+    },
+    lastSignIn: {
+      type: "timestamp",
+      notNull: true,
+      default: pgm.func("current_timestamp"),
     },
     createdAt: {
-        type: 'timestamp',
-        notNull: true,
-        default: pgm.func('current_timestamp'),
+      type: "timestamp",
+      notNull: true,
+      default: pgm.func("current_timestamp"),
     },
-})};
+  });
+};
 
-exports.down = pgm => {};
+exports.down = (pgm) => {};
